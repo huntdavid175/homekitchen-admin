@@ -1,0 +1,620 @@
+"use client";
+
+import type React from "react";
+
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Edit,
+  Filter,
+  MoreHorizontal,
+  Plus,
+  Search,
+} from "lucide-react";
+import Image from "next/image";
+import { MealForm } from "@/components/admin/MealForm";
+
+export function MealManagement() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showAddMealDialog, setShowAddMealDialog] = useState(false);
+  const [showEditMealDialog, setShowEditMealDialog] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState<any>(null);
+
+  // Sample meal data
+  const meals = [
+    {
+      id: "MEAL-001",
+      name: "Garlic Butter Salmon",
+      category: "High Protein",
+      price: "$14.99",
+      calories: 450,
+      prepTime: "30 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-002",
+      name: "Vegetable Stir Fry",
+      category: "Vegetarian",
+      price: "$12.99",
+      calories: 320,
+      prepTime: "25 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-003",
+      name: "Chicken Fajita Bowl",
+      category: "High Protein",
+      price: "$13.99",
+      calories: 520,
+      prepTime: "35 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-004",
+      name: "Mushroom Risotto",
+      category: "Vegetarian",
+      price: "$11.99",
+      calories: 380,
+      prepTime: "40 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-005",
+      name: "Beef Tacos",
+      category: "Family Friendly",
+      price: "$15.99",
+      calories: 550,
+      prepTime: "20 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-006",
+      name: "Pasta Primavera",
+      category: "Vegetarian",
+      price: "$12.99",
+      calories: 420,
+      prepTime: "25 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-007",
+      name: "Teriyaki Chicken",
+      category: "High Protein",
+      price: "$14.99",
+      calories: 480,
+      prepTime: "30 min",
+      status: "Inactive",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-008",
+      name: "Mediterranean Salad",
+      category: "Low Calorie",
+      price: "$10.99",
+      calories: 280,
+      prepTime: "15 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-009",
+      name: "Shrimp Scampi",
+      category: "Seafood",
+      price: "$16.99",
+      calories: 420,
+      prepTime: "25 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-010",
+      name: "Quinoa Bowl",
+      category: "Vegetarian",
+      price: "$13.99",
+      calories: 350,
+      prepTime: "20 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-011",
+      name: "BBQ Pulled Pork",
+      category: "Family Friendly",
+      price: "$15.99",
+      calories: 580,
+      prepTime: "45 min",
+      status: "Inactive",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      id: "MEAL-012",
+      name: "Spinach and Feta Stuffed Chicken",
+      category: "High Protein",
+      price: "$14.99",
+      calories: 450,
+      prepTime: "35 min",
+      status: "Active",
+      image: "/placeholder.svg?height=60&width=60",
+    },
+  ];
+
+  // Filter meals based on search term
+  const filteredMeals = meals.filter(
+    (meal) =>
+      meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meal.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meal.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calculate pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredMeals.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredMeals.length / itemsPerPage);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const nextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  // Add ripple effect to buttons
+  const addRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const button = event.currentTarget;
+    const ripple = document.createElement("span");
+    const rect = button.getBoundingClientRect();
+
+    const size = Math.max(rect.width, rect.height);
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.className =
+      "absolute rounded-full bg-white bg-opacity-30 pointer-events-none";
+    ripple.style.animation = "ripple 0.6s linear";
+
+    button.appendChild(ripple);
+
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+  };
+
+  const handleAddMeal = (values: any) => {
+    console.log("Adding meal:", values);
+    // In a real app, you would make an API call here
+    // and then refresh the meals list
+  };
+
+  const handleEditMeal = (meal: any) => {
+    setSelectedMeal(meal);
+    setShowEditMealDialog(true);
+  };
+
+  const handleUpdateMeal = (values: any) => {
+    console.log("Updating meal:", values);
+    // In a real app, you would make an API call here
+    // and then refresh the meals list
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+          Meal Management
+        </h1>
+        <div className="flex items-center justify-between">
+          <p className="text-muted-foreground">
+            Manage meal offerings, categories, and availability.
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden md:flex items-center gap-2 rounded-xl"
+            >
+              <Download className="h-4 w-4" />
+              Export Meals
+            </Button>
+            <Button
+              size="sm"
+              className="hidden md:flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700"
+              onClick={() => setShowAddMealDialog(true)}
+            >
+              <Plus className="h-4 w-4" />
+              Add Meal
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <Card className="rounded-xl border-none shadow-md overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle>Meals</CardTitle>
+              <CardDescription>
+                Manage meal offerings and availability
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search meals..."
+                  className="pl-9 rounded-xl border-none bg-white shadow-sm"
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1); // Reset to first page on search
+                  }}
+                />
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-xl bg-white shadow-sm relative overflow-hidden transition-all hover:-translate-y-1"
+                    onClick={addRipple}
+                  >
+                    <Filter className="h-4 w-4" />
+                    <span className="sr-only">Filter</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="rounded-xl">
+                  <DropdownMenuLabel>Filter By</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>All Meals</DropdownMenuItem>
+                  <DropdownMenuItem>Active Meals</DropdownMenuItem>
+                  <DropdownMenuItem>Inactive Meals</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>High Protein</DropdownMenuItem>
+                  <DropdownMenuItem>Vegetarian</DropdownMenuItem>
+                  <DropdownMenuItem>Family Friendly</DropdownMenuItem>
+                  <DropdownMenuItem>Low Calorie</DropdownMenuItem>
+                  <DropdownMenuItem>Seafood</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                size="sm"
+                className="rounded-xl md:hidden bg-indigo-600 hover:bg-indigo-700 relative overflow-hidden transition-all hover:-translate-y-1"
+                onClick={() => setShowAddMealDialog(true)}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Tabs defaultValue="all">
+            <TabsList className="p-4 justify-start gap-2 bg-transparent">
+              <TabsTrigger
+                value="all"
+                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              >
+                All Meals
+              </TabsTrigger>
+              <TabsTrigger
+                value="active"
+                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              >
+                Active
+              </TabsTrigger>
+              <TabsTrigger
+                value="inactive"
+                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              >
+                Inactive
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="all" className="mt-0">
+              <div className="overflow-x-auto">
+                <Table className="border-collapse border-spacing-0">
+                  <TableHeader>
+                    <TableRow className="bg-gray-50">
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        Meal
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        ID
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        Category
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        Price
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        Calories
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        Prep Time
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                        Status
+                      </TableHead>
+                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentItems.length > 0 ? (
+                      currentItems.map((meal, index) => (
+                        <TableRow
+                          key={meal.id}
+                          className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
+                          style={{
+                            animationDelay: `${
+                              0.1 + (index % itemsPerPage) * 0.1
+                            }s`,
+                          }}
+                        >
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            <div className="flex items-center gap-3">
+                              <div className="relative h-12 w-12 overflow-hidden rounded-md">
+                                <Image
+                                  src={meal.image || "/placeholder.svg"}
+                                  alt={meal.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="font-medium">{meal.name}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
+                            {meal.id}
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            <Badge
+                              variant="outline"
+                              className="rounded-full px-3 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700"
+                            >
+                              {meal.category}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            {meal.price}
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            {meal.calories} cal
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            {meal.prepTime}
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            <Badge
+                              variant="outline"
+                              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                                meal.status === "Active"
+                                  ? "bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700"
+                                  : "bg-gray-50 text-gray-700 hover:bg-gray-50 hover:text-gray-700"
+                              }`}
+                            >
+                              {meal.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-full relative overflow-hidden transition-all hover:-translate-y-1"
+                                onClick={(e) => {
+                                  addRipple(e);
+                                  handleEditMeal(meal);
+                                }}
+                              >
+                                <Edit className="h-4 w-4" />
+                                <span className="sr-only">Edit</span>
+                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 rounded-full relative overflow-hidden transition-all hover:-translate-y-1"
+                                    onClick={addRipple}
+                                  >
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Open menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                  align="end"
+                                  className="rounded-xl"
+                                >
+                                  <DropdownMenuItem>
+                                    View Details
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => handleEditMeal(meal)}
+                                  >
+                                    Edit Meal
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    Duplicate Meal
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  {meal.status === "Active" ? (
+                                    <DropdownMenuItem className="text-amber-600">
+                                      Deactivate Meal
+                                    </DropdownMenuItem>
+                                  ) : (
+                                    <DropdownMenuItem className="text-green-600">
+                                      Activate Meal
+                                    </DropdownMenuItem>
+                                  )}
+                                  <DropdownMenuItem className="text-red-600">
+                                    Delete Meal
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={8}
+                          className="py-6 text-center text-muted-foreground"
+                        >
+                          No meals found
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Pagination */}
+              {filteredMeals.length > 0 && (
+                <div className="flex items-center justify-between px-4 py-4 border-t border-gray-100">
+                  <div className="text-sm text-muted-foreground">
+                    Showing{" "}
+                    <span className="font-medium">{indexOfFirstItem + 1}</span>{" "}
+                    to{" "}
+                    <span className="font-medium">
+                      {Math.min(indexOfLastItem, filteredMeals.length)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-medium">{filteredMeals.length}</span>{" "}
+                    meals
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
+                      onClick={(e) => {
+                        addRipple(e);
+                        prevPage();
+                      }}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      <span className="sr-only">Previous page</span>
+                    </Button>
+                    <div className="hidden sm:flex items-center space-x-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (pageNumber) => (
+                          <Button
+                            key={`page-${pageNumber}`}
+                            variant={
+                              currentPage === pageNumber ? "default" : "outline"
+                            }
+                            size="sm"
+                            className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
+                              currentPage === pageNumber
+                                ? "bg-indigo-600 hover:bg-indigo-700"
+                                : ""
+                            }`}
+                            onClick={(e) => {
+                              addRipple(e);
+                              paginate(pageNumber);
+                            }}
+                          >
+                            {pageNumber}
+                          </Button>
+                        )
+                      )}
+                    </div>
+                    <div className="sm:hidden">
+                      <span className="text-sm font-medium">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
+                      onClick={(e) => {
+                        addRipple(e);
+                        nextPage();
+                      }}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                      <span className="sr-only">Next page</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="active" className="mt-0">
+              <div className="p-6 text-center text-muted-foreground">
+                Active meals view is under development.
+              </div>
+            </TabsContent>
+
+            <TabsContent value="inactive" className="mt-0">
+              <div className="p-6 text-center text-muted-foreground">
+                Inactive meals view is under development.
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Add Meal Dialog */}
+      <MealForm
+        open={showAddMealDialog}
+        onOpenChange={setShowAddMealDialog}
+        initialData={null}
+        onSubmit={handleAddMeal}
+      />
+
+      {/* Edit Meal Dialog */}
+      {selectedMeal && (
+        <MealForm
+          open={showEditMealDialog}
+          onOpenChange={setShowEditMealDialog}
+          initialData={selectedMeal}
+          onSubmit={handleUpdateMeal}
+        />
+      )}
+    </div>
+  );
+}
