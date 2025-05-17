@@ -40,6 +40,7 @@ import {
   Plus,
   Search,
   UserPlus,
+  Users,
 } from "lucide-react";
 import { UserProfileDialog } from "@/components/admin/UserProfileDialog";
 import { UserEditForm } from "@/components/admin/UserEditForm";
@@ -271,7 +272,7 @@ export function UserManagement() {
     return (
       <div className="space-y-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
             User Management
           </h1>
           <div className="flex items-center justify-between">
@@ -284,12 +285,12 @@ export function UserManagement() {
                 size="sm"
                 className="hidden md:flex items-center gap-2 rounded-xl"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4 text-emerald-600" />
                 Export Users
               </Button>
               <Button
                 size="sm"
-                className="hidden md:flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="hidden md:flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={() => setShowEmptyState(false)}
               >
                 <UserPlus className="h-4 w-4" />
@@ -307,7 +308,7 @@ export function UserManagement() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           User Management
         </h1>
         <div className="flex items-center justify-between">
@@ -320,12 +321,12 @@ export function UserManagement() {
               size="sm"
               className="hidden md:flex items-center gap-2 rounded-xl"
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-4 w-4 text-emerald-600" />
               Export Users
             </Button>
             <Button
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700"
+              className="hidden md:flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700"
               onClick={() => setShowEmptyState(true)}
             >
               <UserPlus className="h-4 w-4" />
@@ -336,7 +337,7 @@ export function UserManagement() {
       </div>
 
       <Card className="rounded-xl border-none shadow-md overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+        <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Users</CardTitle>
@@ -365,7 +366,7 @@ export function UserManagement() {
                     className="rounded-xl bg-white shadow-sm relative overflow-hidden transition-all hover:-translate-y-1"
                     onClick={addRipple}
                   >
-                    <Filter className="h-4 w-4" />
+                    <Filter className="h-4 w-4 text-emerald-600" />
                     <span className="sr-only">Filter</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -386,7 +387,7 @@ export function UserManagement() {
               </DropdownMenu>
               <Button
                 size="sm"
-                className="rounded-xl md:hidden bg-indigo-600 hover:bg-indigo-700 relative overflow-hidden transition-all hover:-translate-y-1"
+                className="rounded-xl md:hidden bg-emerald-600 hover:bg-emerald-700 relative overflow-hidden transition-all hover:-translate-y-1"
                 onClick={addRipple}
               >
                 <Plus className="h-4 w-4" />
@@ -399,19 +400,19 @@ export function UserManagement() {
             <TabsList className="p-4 justify-start gap-2 bg-transparent">
               <TabsTrigger
                 value="all"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 All Users
               </TabsTrigger>
               <TabsTrigger
                 value="customers"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Customers
               </TabsTrigger>
               <TabsTrigger
                 value="admins"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Admins
               </TabsTrigger>
@@ -434,9 +435,9 @@ export function UserManagement() {
                       <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
                         Role
                       </TableHead>
-                      <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
+                      {/* <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
                         Subscription
-                      </TableHead>
+                      </TableHead> */}
                       <TableHead className="py-3 px-4 text-sm font-medium text-gray-600">
                         Join Date
                       </TableHead>
@@ -499,16 +500,12 @@ export function UserManagement() {
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Badge
                               variant="outline"
-                              className={`rounded-full px-3 py-1 text-xs font-medium ${
-                                user.role === "Admin"
-                                  ? "bg-purple-50 text-purple-700 hover:bg-purple-50 hover:text-purple-700"
-                                  : "bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700"
-                              }`}
+                              className="rounded-full px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                             >
                               {user.role}
                             </Badge>
                           </TableCell>
-                          <TableCell className="py-3 px-4 border-t border-gray-100">
+                          {/* <TableCell className="py-3 px-4 border-t border-gray-100">
                             {user.subscriptionPlan === "N/A" ? (
                               <span className="text-muted-foreground">N/A</span>
                             ) : (
@@ -523,7 +520,7 @@ export function UserManagement() {
                                 {user.subscriptionPlan}
                               </Badge>
                             )}
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             {user.joinDate}
                           </TableCell>
@@ -644,7 +641,7 @@ export function UserManagement() {
                             size="sm"
                             className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
                               currentPage === pageNumber
-                                ? "bg-indigo-600 hover:bg-indigo-700"
+                                ? "bg-emerald-600 hover:bg-emerald-700"
                                 : ""
                             }`}
                             onClick={(e) => {

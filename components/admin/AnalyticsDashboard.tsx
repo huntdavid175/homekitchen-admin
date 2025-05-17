@@ -25,6 +25,9 @@ import {
   RefreshCw,
   TrendingUp,
   Users,
+  DollarSign,
+  ShoppingBag,
+  Package,
 } from "lucide-react";
 
 export function AnalyticsDashboard() {
@@ -697,7 +700,7 @@ export function AnalyticsDashboard() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           Analytics Dashboard
         </h1>
         <div className="flex items-center justify-between">
@@ -709,21 +712,19 @@ export function AnalyticsDashboard() {
             <Button
               variant="outline"
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl"
+              className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
               onClick={handleRefresh}
             >
-              <RefreshCw
-                className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
-              />
-              Refresh Data
+              <RefreshCw className="h-4 w-4 text-emerald-600" />
+              Refresh
             </Button>
             <Button
               variant="outline"
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl"
+              className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
             >
-              <Download className="h-4 w-4" />
-              Export Report
+              <Download className="h-4 w-4 text-emerald-600" />
+              Export Data
             </Button>
           </div>
         </div>
@@ -731,7 +732,7 @@ export function AnalyticsDashboard() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -747,7 +748,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -761,9 +762,11 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+              <Users className="h-6 w-6 text-emerald-600" />
+            </div>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">12,234</div>
@@ -777,7 +780,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
               Conversion Rate
             </CardTitle>
@@ -833,7 +836,7 @@ export function AnalyticsDashboard() {
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Revenue Overview</CardTitle>
@@ -864,7 +867,7 @@ export function AnalyticsDashboard() {
             </Card>
 
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Orders Overview</CardTitle>
@@ -897,7 +900,7 @@ export function AnalyticsDashboard() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>User Statistics</CardTitle>
                 <CardDescription>New vs returning users</CardDescription>
               </CardHeader>
@@ -912,7 +915,7 @@ export function AnalyticsDashboard() {
             </Card>
 
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>Top Selling Meals</CardTitle>
                 <CardDescription>
                   Most popular meals by order volume
@@ -932,7 +935,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="revenue" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Revenue Analysis</CardTitle>
               <CardDescription>
                 Detailed breakdown of revenue sources
@@ -952,7 +955,7 @@ export function AnalyticsDashboard() {
                       </div>
                       <div className="h-2 w-full rounded-full bg-gray-100">
                         <div
-                          className="h-2 rounded-full bg-indigo-500"
+                          className="h-2 rounded-full bg-emerald-500"
                           style={{ width: "72%" }}
                         ></div>
                       </div>
@@ -964,7 +967,7 @@ export function AnalyticsDashboard() {
                       </div>
                       <div className="h-2 w-full rounded-full bg-gray-100">
                         <div
-                          className="h-2 rounded-full bg-indigo-500"
+                          className="h-2 rounded-full bg-emerald-500"
                           style={{ width: "28%" }}
                         ></div>
                       </div>
@@ -984,7 +987,7 @@ export function AnalyticsDashboard() {
                       </div>
                       <div className="h-2 w-full rounded-full bg-gray-100">
                         <div
-                          className="h-2 rounded-full bg-indigo-500"
+                          className="h-2 rounded-full bg-emerald-500"
                           style={{ width: "68%" }}
                         ></div>
                       </div>
@@ -996,7 +999,7 @@ export function AnalyticsDashboard() {
                       </div>
                       <div className="h-2 w-full rounded-full bg-gray-100">
                         <div
-                          className="h-2 rounded-full bg-indigo-500"
+                          className="h-2 rounded-full bg-emerald-500"
                           style={{ width: "22%" }}
                         ></div>
                       </div>
@@ -1008,7 +1011,7 @@ export function AnalyticsDashboard() {
                       </div>
                       <div className="h-2 w-full rounded-full bg-gray-100">
                         <div
-                          className="h-2 rounded-full bg-indigo-500"
+                          className="h-2 rounded-full bg-emerald-500"
                           style={{ width: "10%" }}
                         ></div>
                       </div>
@@ -1022,7 +1025,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="users" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>User Retention</CardTitle>
               <CardDescription>
                 New vs returning users over time
@@ -1041,7 +1044,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="meals" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Meal Popularity</CardTitle>
               <CardDescription>Most ordered meals by volume</CardDescription>
             </CardHeader>
@@ -1058,7 +1061,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="delivery" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Delivery Performance</CardTitle>
               <CardDescription>On-time delivery statistics</CardDescription>
             </CardHeader>

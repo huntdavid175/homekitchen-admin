@@ -240,7 +240,7 @@ export function PaymentManagement() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           Payment Management
         </h1>
         <div className="flex items-center justify-between">
@@ -251,10 +251,10 @@ export function PaymentManagement() {
             <Button
               variant="outline"
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl"
+              className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
             >
-              <Download className="h-4 w-4" />
-              Export Transactions
+              <Download className="h-4 w-4 text-emerald-600" />
+              Export
             </Button>
           </div>
         </div>
@@ -262,7 +262,7 @@ export function PaymentManagement() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -274,7 +274,7 @@ export function PaymentManagement() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
               Completed Payments
             </CardTitle>
@@ -286,7 +286,7 @@ export function PaymentManagement() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
               Pending Payments
             </CardTitle>
@@ -300,7 +300,7 @@ export function PaymentManagement() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
               Refunded Amount
             </CardTitle>
@@ -316,7 +316,7 @@ export function PaymentManagement() {
       </div>
 
       <Card className="rounded-xl border-none shadow-md overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+        <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Transactions</CardTitle>
@@ -345,7 +345,7 @@ export function PaymentManagement() {
                     className="rounded-xl bg-white shadow-sm relative overflow-hidden transition-all hover:-translate-y-1"
                     onClick={addRipple}
                   >
-                    <Filter className="h-4 w-4" />
+                    <Filter className="h-4 w-4 text-emerald-600" />
                     <span className="sr-only">Filter</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -383,25 +383,25 @@ export function PaymentManagement() {
             <TabsList className="p-4 justify-start gap-2 bg-transparent">
               <TabsTrigger
                 value="all"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
-                All Transactions
+                All Payments
               </TabsTrigger>
               <TabsTrigger
                 value="completed"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Completed
               </TabsTrigger>
               <TabsTrigger
                 value="pending"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Pending
               </TabsTrigger>
               <TabsTrigger
                 value="refunded"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Refunded
               </TabsTrigger>

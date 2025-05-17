@@ -237,7 +237,7 @@ export function DeliveryScheduleManagement() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           Delivery Schedule
         </h1>
         <div className="flex items-center justify-between">
@@ -248,10 +248,10 @@ export function DeliveryScheduleManagement() {
             <Button
               variant="outline"
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl"
+              className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
             >
-              <Download className="h-4 w-4" />
-              Export Schedule
+              <Download className="h-4 w-4 text-emerald-600" />
+              Export
             </Button>
           </div>
         </div>
@@ -259,7 +259,7 @@ export function DeliveryScheduleManagement() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
               Today's Deliveries
             </CardTitle>
@@ -273,7 +273,7 @@ export function DeliveryScheduleManagement() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">Completed</CardTitle>
             <Truck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -285,7 +285,7 @@ export function DeliveryScheduleManagement() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">In Transit</CardTitle>
             <Truck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -297,7 +297,7 @@ export function DeliveryScheduleManagement() {
           </CardContent>
         </Card>
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
               Active Drivers
             </CardTitle>
@@ -314,7 +314,7 @@ export function DeliveryScheduleManagement() {
 
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="rounded-xl border-none shadow-md overflow-hidden md:col-span-2">
-          <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle>Delivery Calendar</CardTitle>
@@ -349,7 +349,7 @@ export function DeliveryScheduleManagement() {
         </Card>
 
         <Card className="rounded-xl border-none shadow-md overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle>Time Slots</CardTitle>
             <CardDescription>
               Delivery distribution by time slot
@@ -369,7 +369,7 @@ export function DeliveryScheduleManagement() {
                 </div>
                 <div className="h-2 w-full rounded-full bg-gray-100">
                   <div
-                    className="h-2 rounded-full bg-indigo-500"
+                    className="h-2 rounded-full bg-emerald-500"
                     style={{ width: "35%" }}
                   ></div>
                 </div>
@@ -386,7 +386,7 @@ export function DeliveryScheduleManagement() {
                 </div>
                 <div className="h-2 w-full rounded-full bg-gray-100">
                   <div
-                    className="h-2 rounded-full bg-indigo-500"
+                    className="h-2 rounded-full bg-emerald-500"
                     style={{ width: "38%" }}
                   ></div>
                 </div>
@@ -403,7 +403,7 @@ export function DeliveryScheduleManagement() {
                 </div>
                 <div className="h-2 w-full rounded-full bg-gray-100">
                   <div
-                    className="h-2 rounded-full bg-indigo-500"
+                    className="h-2 rounded-full bg-emerald-500"
                     style={{ width: "27%" }}
                   ></div>
                 </div>
@@ -414,7 +414,7 @@ export function DeliveryScheduleManagement() {
       </div>
 
       <Card className="rounded-xl border-none shadow-md overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+        <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Deliveries</CardTitle>
@@ -439,12 +439,11 @@ export function DeliveryScheduleManagement() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    size="icon"
-                    className="rounded-xl bg-white shadow-sm relative overflow-hidden transition-all hover:-translate-y-1"
-                    onClick={addRipple}
+                    size="sm"
+                    className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
                   >
-                    <Filter className="h-4 w-4" />
-                    <span className="sr-only">Filter</span>
+                    <Filter className="h-4 w-4 text-emerald-600" />
+                    Filter
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="rounded-xl">
@@ -469,25 +468,25 @@ export function DeliveryScheduleManagement() {
             <TabsList className="p-4 justify-start gap-2 bg-transparent">
               <TabsTrigger
                 value="all"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 All Deliveries
               </TabsTrigger>
               <TabsTrigger
                 value="today"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Today
               </TabsTrigger>
               <TabsTrigger
                 value="scheduled"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Scheduled
               </TabsTrigger>
               <TabsTrigger
                 value="completed"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Completed
               </TabsTrigger>
@@ -566,17 +565,7 @@ export function DeliveryScheduleManagement() {
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Badge
                               variant="outline"
-                              className={`rounded-full px-3 py-1 text-xs font-medium ${
-                                delivery.status === "Delivered"
-                                  ? "bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700"
-                                  : delivery.status === "In Transit"
-                                  ? "bg-purple-50 text-purple-700 hover:bg-purple-50 hover:text-purple-700 animate-[pulse_2s_infinite]"
-                                  : delivery.status === "Scheduled"
-                                  ? "bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700"
-                                  : delivery.status === "Cancelled"
-                                  ? "bg-red-50 text-red-700 hover:bg-red-50 hover:text-red-700"
-                                  : ""
-                              }`}
+                              className="rounded-full px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                             >
                               {delivery.status}
                             </Badge>
@@ -590,7 +579,7 @@ export function DeliveryScheduleManagement() {
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Link
                               href={`/admin/orders/${delivery.orderId}`}
-                              className="text-indigo-600 hover:underline"
+                              className="text-emerald-600 hover:underline"
                             >
                               {delivery.orderId}
                             </Link>
@@ -636,13 +625,13 @@ export function DeliveryScheduleManagement() {
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   {delivery.status === "Scheduled" && (
-                                    <DropdownMenuItem className="text-purple-600">
+                                    <DropdownMenuItem className="text-emerald-600">
                                       Mark as In Transit
                                     </DropdownMenuItem>
                                   )}
                                   {(delivery.status === "Scheduled" ||
                                     delivery.status === "In Transit") && (
-                                    <DropdownMenuItem className="text-green-600">
+                                    <DropdownMenuItem className="text-emerald-600">
                                       Mark as Delivered
                                     </DropdownMenuItem>
                                   )}
@@ -656,7 +645,7 @@ export function DeliveryScheduleManagement() {
                                           Change Time Slot
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem className="text-red-600">
+                                        <DropdownMenuItem className="text-emerald-600">
                                           Cancel Delivery
                                         </DropdownMenuItem>
                                       </>
@@ -722,7 +711,7 @@ export function DeliveryScheduleManagement() {
                             size="sm"
                             className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
                               currentPage === pageNumber
-                                ? "bg-indigo-600 hover:bg-indigo-700"
+                                ? "bg-emerald-600 hover:bg-emerald-700"
                                 : ""
                             }`}
                             onClick={(e) => {

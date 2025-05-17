@@ -39,6 +39,7 @@ import {
   MoreHorizontal,
   Plus,
   Search,
+  ShoppingBag,
 } from "lucide-react";
 import Image from "next/image";
 import { MealForm } from "@/components/admin/MealForm";
@@ -239,7 +240,7 @@ export function MealManagement() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           Meal Management
         </h1>
         <div className="flex items-center justify-between">
@@ -250,25 +251,25 @@ export function MealManagement() {
             <Button
               variant="outline"
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl"
+              className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
             >
-              <Download className="h-4 w-4" />
-              Export Meals
+              <Plus className="h-4 w-4 text-emerald-600" />
+              Add Meal
             </Button>
             <Button
+              variant="outline"
               size="sm"
-              className="hidden md:flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700"
-              onClick={() => setShowAddMealDialog(true)}
+              className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
             >
-              <Plus className="h-4 w-4" />
-              Add Meal
+              <Download className="h-4 w-4 text-emerald-600" />
+              Export
             </Button>
           </div>
         </div>
       </div>
 
       <Card className="rounded-xl border-none shadow-md overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+        <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Meals</CardTitle>
@@ -297,7 +298,7 @@ export function MealManagement() {
                     className="rounded-xl bg-white shadow-sm relative overflow-hidden transition-all hover:-translate-y-1"
                     onClick={addRipple}
                   >
-                    <Filter className="h-4 w-4" />
+                    <Filter className="h-4 w-4 text-emerald-600" />
                     <span className="sr-only">Filter</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -317,7 +318,7 @@ export function MealManagement() {
               </DropdownMenu>
               <Button
                 size="sm"
-                className="rounded-xl md:hidden bg-indigo-600 hover:bg-indigo-700 relative overflow-hidden transition-all hover:-translate-y-1"
+                className="rounded-xl md:hidden bg-emerald-600 hover:bg-emerald-700 relative overflow-hidden transition-all hover:-translate-y-1"
                 onClick={() => setShowAddMealDialog(true)}
               >
                 <Plus className="h-4 w-4" />
@@ -330,19 +331,19 @@ export function MealManagement() {
             <TabsList className="p-4 justify-start gap-2 bg-transparent">
               <TabsTrigger
                 value="all"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 All Meals
               </TabsTrigger>
               <TabsTrigger
                 value="active"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Active
               </TabsTrigger>
               <TabsTrigger
                 value="inactive"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Inactive
               </TabsTrigger>
@@ -408,7 +409,7 @@ export function MealManagement() {
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Badge
                               variant="outline"
-                              className="rounded-full px-3 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700"
+                              className="rounded-full px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                             >
                               {meal.category}
                             </Badge>
@@ -547,7 +548,7 @@ export function MealManagement() {
                             size="sm"
                             className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
                               currentPage === pageNumber
-                                ? "bg-indigo-600 hover:bg-indigo-700"
+                                ? "bg-emerald-600 hover:bg-emerald-700"
                                 : ""
                             }`}
                             onClick={(e) => {

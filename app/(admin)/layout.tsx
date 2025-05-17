@@ -64,12 +64,12 @@ export default function AdminLayout({
       href: "/meals",
       active: pathname === "/meals",
     },
-    {
-      label: "Subscriptions",
-      icon: ClipboardList,
-      href: "/subscriptions",
-      active: pathname === "/subscriptions",
-    },
+    // {
+    //   label: "Subscriptions",
+    //   icon: ClipboardList,
+    //   href: "/subscriptions",
+    //   active: pathname === "/subscriptions",
+    // },
     {
       label: "Payments",
       icon: CreditCard,
@@ -156,7 +156,7 @@ export default function AdminLayout({
           <span className="sr-only">Menu</span>
         </Button>
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-purple-400 to-indigo-600 text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 text-white">
             <Package className="h-5 w-5" />
           </div>
           <span className="text-lg font-semibold">MealBox Admin</span>
@@ -210,7 +210,7 @@ export default function AdminLayout({
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-[280px] p-0 border-r-0">
           <div className="flex h-16 items-center gap-2 border-b px-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-purple-400 to-indigo-600 text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 text-white">
               <Package className="h-5 w-5" />
             </div>
             <span className="text-lg font-semibold">MealBox Admin</span>
@@ -232,7 +232,7 @@ export default function AdminLayout({
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2 transition-all",
                   route.active
-                    ? "bg-gradient-to-r from-purple-50 to-indigo-50 text-indigo-600 font-medium"
+                    ? "bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-600 font-medium"
                     : "text-gray-600 hover:bg-gray-50"
                 )}
                 onClick={() => setOpen(false)}
@@ -255,7 +255,7 @@ export default function AdminLayout({
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2 transition-all",
                   route.active
-                    ? "bg-gradient-to-r from-purple-50 to-indigo-50 text-indigo-600 font-medium"
+                    ? "bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-600 font-medium"
                     : "text-gray-600 hover:bg-gray-50"
                 )}
               >

@@ -55,7 +55,7 @@ export function AdminDashboard({
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           Admin Dashboard
         </h1>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -120,7 +120,7 @@ export function AdminDashboard({
             {showEmptyStates ? (
               <>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50 w-full">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50 w-full">
                     <CardTitle className="text-sm font-medium">
                       Total Revenue
                     </CardTitle>
@@ -135,7 +135,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
                       Active Subscriptions
                     </CardTitle>
@@ -150,7 +150,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
                       Active Users
                     </CardTitle>
@@ -165,7 +165,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
                       Pending Orders
                     </CardTitle>
@@ -183,7 +183,7 @@ export function AdminDashboard({
             ) : (
               <>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50 w-full">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50 w-full">
                     <CardTitle className="text-sm font-medium">
                       Total Revenue
                     </CardTitle>
@@ -201,7 +201,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
                       Active Subscriptions
                     </CardTitle>
@@ -219,7 +219,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
                       Active Users
                     </CardTitle>
@@ -237,7 +237,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
                       Pending Orders
                     </CardTitle>
@@ -257,10 +257,10 @@ export function AdminDashboard({
               </>
             )}
           </div>
-
+          {/* 
           <div className="grid gap-4 md:grid-cols-3">
             <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle className="text-sm font-medium">
                   Quick Actions
                 </CardTitle>
@@ -270,34 +270,34 @@ export function AdminDashboard({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-indigo-50 transition-all"
+                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-emerald-50 transition-all"
                     onClick={() => setSupportDialogOpen(true)}
                   >
-                    <HelpCircle className="h-5 w-5 text-indigo-600" />
+                    <HelpCircle className="h-5 w-5 text-emerald-600" />
                     <span className="text-xs font-medium">Contact Support</span>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-indigo-50 transition-all"
+                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-emerald-50 transition-all"
                   >
-                    <Settings className="h-5 w-5 text-indigo-600" />
+                    <Settings className="h-5 w-5 text-emerald-600" />
                     <span className="text-xs font-medium">System Settings</span>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-indigo-50 transition-all"
+                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-emerald-50 transition-all"
                   >
-                    <Download className="h-5 w-5 text-indigo-600" />
+                    <Download className="h-5 w-5 text-emerald-600" />
                     <span className="text-xs font-medium">Export Data</span>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-indigo-50 transition-all"
+                    className="flex flex-col h-auto py-4 rounded-lg justify-center items-center gap-2 hover:bg-emerald-50 transition-all"
                   >
-                    <Calendar className="h-5 w-5 text-indigo-600" />
+                    <Calendar className="h-5 w-5 text-emerald-600" />
                     <span className="text-xs font-medium">Schedule</span>
                   </Button>
                 </div>
@@ -305,7 +305,7 @@ export function AdminDashboard({
             </Card>
 
             <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:col-span-2">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle className="text-sm font-medium">
                   System Status
                 </CardTitle>
@@ -345,13 +345,49 @@ export function AdminDashboard({
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
             {showEmptyStates ? (
               <>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle>Recent Orders</CardTitle>
+                        <CardDescription>
+                          Latest orders across the platform
+                        </CardDescription>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-lg bg-white"
+                      >
+                        View All
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <RecentOrdersTable showEmptyState={true} />
+                  </CardContent>
+                </Card>
+                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
+                    <CardTitle>Top Selling Meals</CardTitle>
+                    <CardDescription>
+                      Top 5 meals by order volume
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <TopMeals showEmptyState={true} />
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <>
+                {/* <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle>Revenue Overview</CardTitle>
@@ -378,25 +414,85 @@ export function AdminDashboard({
                     </div>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <RevenueChart showEmptyState={true} />
+                    <RevenueChart />
+                  </CardContent>
+                </Card> */}
+                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle>Recent Orders</CardTitle>
+                        <CardDescription>
+                          Latest orders across the platform
+                        </CardDescription>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-lg bg-white"
+                      >
+                        View All
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <RecentOrdersTable />
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle>Top Selling Meals</CardTitle>
                     <CardDescription>
                       Top 5 meals by order volume
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <TopMeals showEmptyState={true} />
+                    <TopMeals />
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
+
+          {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+            {showEmptyStates ? (
+              <>
+                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle>Recent Orders</CardTitle>
+                        <CardDescription>
+                          Latest orders across the platform
+                        </CardDescription>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-lg bg-white"
+                      >
+                        View All
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <RecentOrdersTable showEmptyState={true} />
+                  </CardContent>
+                </Card>
+                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
+                    <CardTitle>User Statistics</CardTitle>
+                    <CardDescription>New vs returning users</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <UserStatsChart showEmptyState={true} />
                   </CardContent>
                 </Card>
               </>
             ) : (
               <>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle>Revenue Overview</CardTitle>
@@ -427,81 +523,7 @@ export function AdminDashboard({
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-                    <CardTitle>Top Selling Meals</CardTitle>
-                    <CardDescription>
-                      Top 5 meals by order volume
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <TopMeals />
-                  </CardContent>
-                </Card>
-              </>
-            )}
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-            {showEmptyStates ? (
-              <>
-                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle>Recent Orders</CardTitle>
-                        <CardDescription>
-                          Latest orders across the platform
-                        </CardDescription>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="rounded-lg bg-white"
-                      >
-                        View All
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <RecentOrdersTable showEmptyState={true} />
-                  </CardContent>
-                </Card>
-                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-                    <CardTitle>User Statistics</CardTitle>
-                    <CardDescription>New vs returning users</CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <UserStatsChart showEmptyState={true} />
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <>
-                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-4">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle>Recent Orders</CardTitle>
-                        <CardDescription>
-                          Latest orders across the platform
-                        </CardDescription>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="rounded-lg bg-white"
-                      >
-                        View All
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <RecentOrdersTable />
-                  </CardContent>
-                </Card>
-                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
-                  <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                  <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle>User Statistics</CardTitle>
                     <CardDescription>New vs returning users</CardDescription>
                   </CardHeader>
@@ -511,12 +533,12 @@ export function AdminDashboard({
                 </Card>
               </>
             )}
-          </div>
+          </div> */}
 
           {showEmptyStates ? (
             <div className="grid gap-6 md:grid-cols-3">
               <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                   <CardTitle>Upcoming Deliveries</CardTitle>
                   <CardDescription>Scheduled for today</CardDescription>
                 </CardHeader>
@@ -529,7 +551,7 @@ export function AdminDashboard({
                 </CardContent>
               </Card>
               <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                   <CardTitle>Inventory Status</CardTitle>
                   <CardDescription>Current meal ingredients</CardDescription>
                 </CardHeader>
@@ -542,7 +564,7 @@ export function AdminDashboard({
                 </CardContent>
               </Card>
               <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                   <CardTitle>Customer Satisfaction</CardTitle>
                   <CardDescription>Based on recent reviews</CardDescription>
                 </CardHeader>
@@ -578,14 +600,14 @@ export function AdminDashboard({
           ) : (
             <div className="grid gap-6 md:grid-cols-3">
               <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                   <CardTitle>Upcoming Deliveries</CardTitle>
                   <CardDescription>Scheduled for today</CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                      <Calendar className="h-6 w-6 text-indigo-600" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+                      <Calendar className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
                       <div className="text-2xl font-bold">247</div>
@@ -617,14 +639,14 @@ export function AdminDashboard({
                 </CardContent>
               </Card>
               <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                   <CardTitle>Inventory Status</CardTitle>
                   <CardDescription>Current meal ingredients</CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                      <ShoppingBag className="h-6 w-6 text-indigo-600" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+                      <ShoppingBag className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
                       <div className="text-2xl font-bold">98.2%</div>
@@ -656,13 +678,13 @@ export function AdminDashboard({
                 </CardContent>
               </Card>
               <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                   <CardTitle>Customer Satisfaction</CardTitle>
                   <CardDescription>Based on recent reviews</CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -673,7 +695,7 @@ export function AdminDashboard({
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="h-6 w-6 text-indigo-600"
+                        className="h-6 w-6 text-emerald-600"
                       >
                         <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
                         <path d="M8.5 8.5v.01" />
@@ -721,7 +743,7 @@ export function AdminDashboard({
             <EmptyAnalyticsState />
           ) : (
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>Analytics Content</CardTitle>
                 <CardDescription>
                   Detailed analytics will be displayed here
@@ -739,7 +761,7 @@ export function AdminDashboard({
         <TabsContent value="reports" className="space-y-4">
           {showEmptyStates ? (
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>Reports Content</CardTitle>
                 <CardDescription>
                   Generated reports will be displayed here
@@ -755,7 +777,7 @@ export function AdminDashboard({
             </Card>
           ) : (
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>Reports Content</CardTitle>
                 <CardDescription>
                   Generated reports will be displayed here
@@ -773,7 +795,7 @@ export function AdminDashboard({
         <TabsContent value="notifications" className="space-y-4">
           {showEmptyStates ? (
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>Notifications Content</CardTitle>
                 <CardDescription>
                   System notifications will be displayed here
@@ -789,7 +811,7 @@ export function AdminDashboard({
             </Card>
           ) : (
             <Card className="rounded-xl border-none shadow-md overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
                 <CardTitle>Notifications Content</CardTitle>
                 <CardDescription>
                   System notifications will be displayed here

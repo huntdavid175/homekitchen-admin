@@ -38,6 +38,7 @@ import {
   Filter,
   MoreHorizontal,
   Search,
+  Package,
 } from "lucide-react";
 import Link from "next/link";
 import { EmptyOrdersState } from "./EmptyStates";
@@ -226,7 +227,7 @@ export function OrderManagement() {
     return (
       <div className="space-y-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
             Order Management
           </h1>
           <div className="flex items-center justify-between">
@@ -255,7 +256,7 @@ export function OrderManagement() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
           Order Management
         </h1>
         <div className="flex items-center justify-between">
@@ -277,7 +278,7 @@ export function OrderManagement() {
       </div>
 
       <Card className="rounded-xl border-none shadow-md overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+        <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Orders</CardTitle>
@@ -304,7 +305,7 @@ export function OrderManagement() {
                     className="rounded-xl bg-white shadow-sm relative overflow-hidden transition-all hover:-translate-y-1"
                     onClick={addRipple}
                   >
-                    <Filter className="h-4 w-4" />
+                    <Filter className="h-4 w-4 text-emerald-600" />
                     <span className="sr-only">Filter</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -332,25 +333,25 @@ export function OrderManagement() {
             <TabsList className="p-4 justify-start gap-2 bg-transparent">
               <TabsTrigger
                 value="all"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 All Orders
               </TabsTrigger>
               <TabsTrigger
                 value="pending"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Pending
               </TabsTrigger>
               <TabsTrigger
                 value="processing"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Processing
               </TabsTrigger>
               <TabsTrigger
                 value="completed"
-                className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
               >
                 Completed
               </TabsTrigger>

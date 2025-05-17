@@ -23,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Save, Settings } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export function AdminSettings() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,8 +40,8 @@ export function AdminSettings() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
-          Admin Settings
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-green-600">
+          Settings
         </h1>
         <p className="text-muted-foreground">
           Configure system settings, notifications, and preferences.
@@ -88,7 +90,7 @@ export function AdminSettings() {
 
         <TabsContent value="general" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>General Settings</CardTitle>
               <CardDescription>
                 Manage your system-wide settings
@@ -167,7 +169,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >
@@ -177,7 +179,7 @@ export function AdminSettings() {
           </Card>
 
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>System Maintenance</CardTitle>
               <CardDescription>
                 Configure system maintenance settings
@@ -225,7 +227,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >
@@ -237,7 +239,7 @@ export function AdminSettings() {
 
         <TabsContent value="notifications" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Notification Settings</CardTitle>
               <CardDescription>Configure system notifications</CardDescription>
             </CardHeader>
@@ -297,7 +299,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >
@@ -309,7 +311,7 @@ export function AdminSettings() {
 
         <TabsContent value="delivery" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Delivery Settings</CardTitle>
               <CardDescription>
                 Configure delivery options and zones
@@ -370,7 +372,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >
@@ -382,7 +384,7 @@ export function AdminSettings() {
 
         <TabsContent value="payments" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Payment Settings</CardTitle>
               <CardDescription>
                 Configure payment methods and processors
@@ -450,7 +452,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >
@@ -462,7 +464,7 @@ export function AdminSettings() {
 
         <TabsContent value="security" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Security Settings</CardTitle>
               <CardDescription>
                 Configure security and access controls
@@ -530,7 +532,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >
@@ -542,7 +544,7 @@ export function AdminSettings() {
 
         <TabsContent value="api" className="space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>API Settings</CardTitle>
               <CardDescription>Manage API keys and access</CardDescription>
             </CardHeader>
@@ -597,7 +599,7 @@ export function AdminSettings() {
                 Cancel
               </Button>
               <Button
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleSave}
                 disabled={isLoading}
               >

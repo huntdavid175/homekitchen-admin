@@ -146,7 +146,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-2/3 space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 flex flex-row justify-between items-center">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50 flex flex-row justify-between items-center">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   Transaction #{payment.id}
@@ -196,13 +196,13 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                 <TabsList className="p-4 justify-start gap-2 bg-transparent">
                   <TabsTrigger
                     value="details"
-                    className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                    className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
                   >
                     Payment Details
                   </TabsTrigger>
                   <TabsTrigger
                     value="timeline"
-                    className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                    className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
                   >
                     Timeline
                   </TabsTrigger>
@@ -260,7 +260,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <div className="flex items-center gap-3 mb-3">
                             <div className="h-10 w-10 rounded-md bg-white flex items-center justify-center">
-                              <CreditCard className="h-6 w-6 text-indigo-500" />
+                              <CreditCard className="h-6 w-6 text-emerald-500" />
                             </div>
                             <div>
                               <div className="font-medium">
@@ -376,7 +376,10 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                               className="rounded-xl w-full relative overflow-hidden transition-all hover:-translate-y-1"
                               asChild
                             >
-                              <Link href={`/users/${payment.customer.id}`}>
+                              <Link
+                                href={`/users/${payment.customer.id}`}
+                                className="text-emerald-600 hover:underline"
+                              >
                                 <User className="h-3 w-3 mr-2" />
                                 View Customer Profile
                               </Link>
@@ -397,7 +400,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                               </span>
                               <Link
                                 href={`/orders/${payment.order.id}`}
-                                className="text-indigo-600 hover:underline"
+                                className="text-emerald-600 hover:underline"
                               >
                                 {payment.order.id}
                               </Link>
@@ -438,7 +441,10 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                               className="rounded-xl w-full relative overflow-hidden transition-all hover:-translate-y-1"
                               asChild
                             >
-                              <Link href={`/orders/${payment.order.id}`}>
+                              <Link
+                                href={`/orders/${payment.order.id}`}
+                                className="text-emerald-600 hover:underline"
+                              >
                                 <FileText className="h-3 w-3 mr-2" />
                                 View Order Details
                               </Link>
@@ -459,16 +465,16 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                           className="flex items-start mb-6 last:mb-0"
                         >
                           <div className="flex flex-col items-center mr-4">
-                            <div className="h-8 w-8 rounded-full flex items-center justify-center bg-indigo-100 text-indigo-600">
+                            <div className="h-8 w-8 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-600">
                               {index === payment.timeline.length - 1 ? (
                                 <Check className="h-4 w-4" />
                               ) : (
-                                <div className="h-2 w-2 rounded-full bg-indigo-600"></div>
+                                <div className="h-2 w-2 rounded-full bg-emerald-600"></div>
                               )}
                             </div>
                             {index < payment.timeline.length - 1 && (
                               <div
-                                className="h-full w-0.5 bg-indigo-100"
+                                className="h-full w-0.5 bg-emerald-100"
                                 style={{ height: "30px" }}
                               ></div>
                             )}
@@ -491,7 +497,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
 
         <div className="w-full md:w-1/3 space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Payment Actions</CardTitle>
               <CardDescription>Manage this payment transaction</CardDescription>
             </CardHeader>
@@ -533,7 +539,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
           </Card>
 
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Payment Summary</CardTitle>
               <CardDescription>Transaction overview</CardDescription>
             </CardHeader>
@@ -581,7 +587,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                   <span className="text-sm text-muted-foreground">Order</span>
                   <Link
                     href={`/orders/${payment.order.id}`}
-                    className="text-indigo-600 hover:underline"
+                    className="text-emerald-600 hover:underline"
                   >
                     {payment.order.id}
                   </Link>
@@ -592,7 +598,7 @@ export function PaymentDetails({ paymentId }: PaymentDetailsProps) {
                   </span>
                   <Link
                     href={`/users/${payment.customer.id}`}
-                    className="text-indigo-600 hover:underline"
+                    className="text-emerald-600 hover:underline"
                   >
                     {payment.customer.id}
                   </Link>
