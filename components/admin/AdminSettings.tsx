@@ -102,7 +102,7 @@ export function AdminSettings() {
                   <Label htmlFor="company-name">Company Name</Label>
                   <Input
                     id="company-name"
-                    defaultValue="MealBox"
+                    defaultValue="House Kitchen"
                     className="rounded-xl"
                   />
                 </div>

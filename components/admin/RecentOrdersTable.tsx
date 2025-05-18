@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import { format, isValid } from "date-fns";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,50 +19,53 @@ import { EmptyTableState } from "@/components/admin/EmptyStates";
 
 interface RecentOrdersTableProps {
   showEmptyState?: boolean;
+  recentOrders?: any;
 }
 
 export function RecentOrdersTable({
   showEmptyState = false,
+  recentOrders,
 }: RecentOrdersTableProps) {
-  const orders = showEmptyState
-    ? []
-    : [
-        {
-          id: "ORD-7291",
-          customer: "Alex Johnson",
-          date: "April 11, 2023",
-          status: "Delivered",
-          total: "$59.96",
-        },
-        {
-          id: "ORD-6384",
-          customer: "Sarah Williams",
-          date: "April 11, 2023",
-          status: "Preparing",
-          total: "$44.97",
-        },
-        {
-          id: "ORD-5127",
-          customer: "Michael Brown",
-          date: "April 11, 2023",
-          status: "Ready",
-          total: "$59.96",
-        },
-        {
-          id: "ORD-4982",
-          customer: "Emily Davis",
-          date: "April 10, 2023",
-          status: "Confirmed",
-          total: "$29.98",
-        },
-        {
-          id: "ORD-3756",
-          customer: "David Wilson",
-          date: "April 10, 2023",
-          status: "Pending",
-          total: "$59.96",
-        },
-      ];
+  console.dir(recentOrders);
+  //   const orders =
+  //     ? []
+  //     : [
+  //         {
+  //           id: "ORD-7291",
+  //           customer: "Alex Johnson",
+  //           date: "April 11, 2023",
+  //           status: "Delivered",
+  //           total: "$59.96",
+  //         },
+  //         {
+  //           id: "ORD-6384",
+  //           customer: "Sarah Williams",
+  //           date: "April 11, 2023",
+  //           status: "Preparing",
+  //           total: "$44.97",
+  //         },
+  //         {
+  //           id: "ORD-5127",
+  //           customer: "Michael Brown",
+  //           date: "April 11, 2023",
+  //           status: "Ready",
+  //           total: "$59.96",
+  //         },
+  //         {
+  //           id: "ORD-4982",
+  //           customer: "Emily Davis",
+  //           date: "April 10, 2023",
+  //           status: "Confirmed",
+  //           total: "$29.98",
+  //         },
+  //         {
+  //           id: "ORD-3756",
+  //           customer: "David Wilson",
+  //           date: "April 10, 2023",
+  //           status: "Pending",
+  //           total: "$59.96",
+  //         },
+  //       ];
 
   // Add ripple effect to buttons
   const addRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -87,7 +91,15 @@ export function RecentOrdersTable({
     }, 600);
   };
 
-  if (showEmptyState || orders.length === 0) {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    if (!isValid(date)) {
+      return "Invalid date";
+    }
+    return format(date, "MMMM d, yyyy");
+  };
+
+  if (showEmptyState || recentOrders.length === 0) {
     return (
       <EmptyTableState
         title="No recent orders"
@@ -121,20 +133,20 @@ export function RecentOrdersTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order, index) => (
+          {recentOrders.map((order: any, index: number) => (
             <TableRow
               key={order.id}
               className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
               style={{ animationDelay: `${0.1 + index * 0.1}s` }}
             >
               <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
-                {order.id}
+                ORD-{index}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
-                {order.customer}
+                {order.customer.name}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
-                {order.date}
+                {formatDate(order.delivery_date)}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
                 <Badge
@@ -159,7 +171,7 @@ export function RecentOrdersTable({
                 </Badge>
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100 text-right font-medium">
-                {order.total}
+                ₵{order.total_price}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
                 <Button
@@ -170,7 +182,7 @@ export function RecentOrdersTable({
                   onClick={addRipple}
                 >
                   <Link
-                    href={`/admin/orders/${order.id}`}
+                    href={`/orders/${order.id}`}
                     className="flex items-center gap-1"
                   >
                     <Eye className="h-3 w-3 mr-1" />

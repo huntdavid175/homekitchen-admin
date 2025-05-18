@@ -36,10 +36,12 @@ import {
 
 interface AdminDashboardProps {
   showEmptyStates?: boolean;
+  overview: any;
 }
 
 export function AdminDashboard({
   showEmptyStates = false,
+  overview,
 }: AdminDashboardProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [supportDialogOpen, setSupportDialogOpen] = useState(false);
@@ -226,13 +228,27 @@ export function AdminDashboard({
                     <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent className="pt-6">
-                    <div className="text-2xl font-bold">+12,234</div>
+                    <div className="text-2xl font-bold">
+                      +{overview.active_users.count}
+                    </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      +2.6% from last month
+                      +{overview.active_users.growth.value} this month
                     </p>
-                    <div className="mt-4 flex items-center gap-1 text-xs text-green-600 font-medium">
-                      <ArrowUp className="h-3 w-3" />
-                      <span>4.3%</span>
+                    <div
+                      className={`mt-4 flex items-center gap-1 text-xs ${
+                        overview.active_users.growth.trend === "no_change" ||
+                        overview.active_users.growth.trend === "increase"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      } font-medium`}
+                    >
+                      {overview.active_users.growth.trend === "no_change" ||
+                      overview.active_users.growth.trend === "increase" ? (
+                        <ArrowUp className="h-3 w-3" />
+                      ) : (
+                        <ArrowDown className="h-3 w-3" />
+                      )}
+                      <span>{overview.active_users.growth.percentage}%</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -244,13 +260,27 @@ export function AdminDashboard({
                     <Package className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent className="pt-6">
-                    <div className="text-2xl font-bold">+573</div>
+                    <div className="text-2xl font-bold">
+                      +{overview.pending_orders.count}
+                    </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      +201 since yesterday
+                      +{overview.pending_orders.growth.value} since yesterday
                     </p>
-                    <div className="mt-4 flex items-center gap-1 text-xs text-red-600 font-medium">
-                      <ArrowDown className="h-3 w-3" />
-                      <span>2.1%</span>
+                    <div
+                      className={`mt-4 flex items-center gap-1 text-xs ${
+                        overview.active_users.growth.trend === "no_change" ||
+                        overview.active_users.growth.trend === "increase"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      } font-medium`}
+                    >
+                      {overview.pending_orders.growth.trend === "no_change" ||
+                      overview.pending_orders.growth.trend === "increase" ? (
+                        <ArrowUp className="h-3 w-3" />
+                      ) : (
+                        <ArrowDown className="h-3 w-3" />
+                      )}
+                      <span>{overview.active_users.growth.percentage}%</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -436,7 +466,7 @@ export function AdminDashboard({
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <RecentOrdersTable />
+                    <RecentOrdersTable recentOrders={overview.recent_orders} />
                   </CardContent>
                 </Card>
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg lg:col-span-3">
@@ -447,7 +477,7 @@ export function AdminDashboard({
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <TopMeals />
+                    <TopMeals topMeals={overview.top_meals} />
                   </CardContent>
                 </Card>
               </>

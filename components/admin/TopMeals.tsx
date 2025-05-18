@@ -9,41 +9,48 @@ import { ShoppingBag } from "lucide-react";
 
 interface TopMealsProps {
   showEmptyState?: boolean;
+  topMeals?: any;
 }
 
-export function TopMeals({ showEmptyState = false }: TopMealsProps) {
-  const topMeals = [
-    {
-      name: "Garlic Butter Salmon",
-      orders: 1245,
-      percentage: 100,
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      name: "Chicken Fajita Bowl",
-      orders: 1120,
-      percentage: 90,
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      name: "Vegetable Stir Fry",
-      orders: 980,
-      percentage: 79,
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      name: "Beef Tacos",
-      orders: 865,
-      percentage: 69,
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      name: "Mushroom Risotto",
-      orders: 740,
-      percentage: 59,
-      image: "/placeholder.svg?height=40&width=40",
-    },
-  ];
+export function TopMeals({ showEmptyState = false, topMeals }: TopMealsProps) {
+  console.log(topMeals);
+  //   const topMeals = [
+  //     {
+  //       name: "Garlic Butter Salmon",
+  //       orders: 1245,
+  //       percentage: 100,
+  //       image:
+  //         "https://www.howsweeteats.com/wp-content/uploads/2023/01/sticky-garlic-butter-salmon-9.jpg",
+  //     },
+  //     {
+  //       name: "Chicken Fajita Bowl",
+  //       orders: 1120,
+  //       percentage: 90,
+  //       image:
+  //         "https://www.eatingwell.com/thmb/K_2r885RYGvLazrKiRLQh-AP9Yk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/5633964-2bdb06b6d92a480b88e25aacd8fb85e4.jpg",
+  //     },
+  //     {
+  //       name: "Vegetable Stir Fry",
+  //       orders: 980,
+  //       percentage: 79,
+  //       image:
+  //         "https://cdn.loveandlemons.com/wp-content/uploads/2025/02/stir-fry.jpg",
+  //     },
+  //     {
+  //       name: "Beef Tacos",
+  //       orders: 865,
+  //       percentage: 69,
+  //       image:
+  //         "https://loveandgoodstuff.com/wp-content/uploads/2020/08/classic-ground-beef-tacos-1200x1200.jpg",
+  //     },
+  //     {
+  //       name: "Mushroom Risotto",
+  //       orders: 740,
+  //       percentage: 59,
+  //       image:
+  //         "https://veganhuggs.com/wp-content/uploads/2018/04/instant-pot-mushroom-risotto-in-bowl-1-500x500.jpeg",
+  //     },
+  //   ];
 
   if (showEmptyState) {
     return (
@@ -58,7 +65,7 @@ export function TopMeals({ showEmptyState = false }: TopMealsProps) {
 
   return (
     <div className="space-y-6">
-      {topMeals.map((meal, index) => (
+      {topMeals.map((meal: any, index: number) => (
         <div key={index} className="space-y-2">
           <div className="flex items-center gap-3">
             <div className="relative h-10 w-10 overflow-hidden rounded-md">

@@ -159,7 +159,7 @@ export default function AdminLayout({
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 text-white">
             <Package className="h-5 w-5" />
           </div>
-          <span className="text-lg font-semibold">MealBox Admin</span>
+          <span className="text-lg font-semibold">House Kitchen Admin</span>
         </div>
         <div className="ml-auto flex items-center gap-4">
           <DropdownMenu>
