@@ -82,12 +82,12 @@ export default function AdminLayout({
       href: "/schedule",
       active: pathname === "/schedule",
     },
-    {
-      label: "Analytics",
-      icon: BarChart3,
-      href: "/analytics",
-      active: pathname === "/analytics",
-    },
+    // {
+    //   label: "Analytics",
+    //   icon: BarChart3,
+    //   href: "/analytics",
+    //   active: pathname === "/analytics",
+    // },
     {
       label: "Settings",
       icon: Settings,

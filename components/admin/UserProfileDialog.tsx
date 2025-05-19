@@ -278,9 +278,7 @@ export function UserProfileDialog({
                 className="rounded-lg"
                 asChild
               >
-                <Link href={`/admin/users/${userId}/orders`}>
-                  View All Orders
-                </Link>
+                <Link href={`/users/${userId}/orders`}>View All Orders</Link>
               </Button>
             </div>
 

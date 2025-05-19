@@ -315,8 +315,13 @@ export function UserOrdersList({
                                 align="end"
                                 className="rounded-xl"
                               >
-                                <DropdownMenuItem>
-                                  View Details
+                                <DropdownMenuItem asChild>
+                                  <Link
+                                    href={`/orders/${order.id}`}
+                                    className="flex items-center gap-1"
+                                  >
+                                    View Details
+                                  </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>Edit Order</DropdownMenuItem>
                                 <DropdownMenuSeparator />

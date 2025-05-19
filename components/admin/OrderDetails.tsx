@@ -53,12 +53,14 @@ import {
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { formatDate } from "@/lib/helpers";
 
 interface OrderDetailsProps {
   orderId: string;
+  orderDetails: any;
 }
 
-export function OrderDetails({ orderId }: OrderDetailsProps) {
+export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [orderStatus, setOrderStatus] = useState("Confirmed");
@@ -205,41 +207,41 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-2/3 space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 flex flex-row justify-between items-center">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50 flex flex-row justify-between items-center">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  Order #{order.id}
+                  Order #{orderDetails.id}
                   <Badge
                     variant="outline"
                     className={`ml-2 rounded-full px-3 py-1 text-xs font-medium ${
-                      order.status === "Delivered"
+                      orderDetails.status === "delivered"
                         ? "bg-green-50 text-green-700"
-                        : order.status === "Preparing"
+                        : orderDetails.status === "preparing"
                         ? "bg-purple-50 text-purple-700"
-                        : order.status === "Pending"
+                        : orderDetails.status === "pending"
                         ? "bg-amber-50 text-amber-700"
-                        : order.status === "Confirmed"
+                        : orderDetails.status === "confirmed"
                         ? "bg-blue-50 text-blue-700"
-                        : order.status === "Ready"
+                        : orderDetails.status === "ready"
                         ? "bg-teal-50 text-teal-700"
-                        : order.status === "Cancelled"
+                        : orderDetails.status === "cancelled"
                         ? "bg-red-50 text-red-700"
-                        : order.status === "Out for Delivery"
+                        : orderDetails.status === "Out for Delivery"
                         ? "bg-indigo-50 text-indigo-700"
                         : ""
                     }`}
                   >
-                    {order.status}
+                    {orderDetails.status}
                   </Badge>
                 </CardTitle>
                 <CardDescription className="flex items-center gap-2 mt-1">
                   <Calendar className="h-3 w-3" />
-                  {order.date}
+                  {formatDate(orderDetails.created_at)}
                   <Clock className="h-3 w-3 ml-2" />
                   {order.time}
                 </CardDescription>
               </div>
-              <div className="flex gap-2">
+              {/* <div className="flex gap-2">
                 <Button
                   variant="outline"
                   size="sm"
@@ -251,7 +253,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                 </Button>
                 <Button
                   size="sm"
-                  className="rounded-xl bg-indigo-600 hover:bg-indigo-700 relative overflow-hidden transition-all hover:-translate-y-1"
+                  className="rounded-xl bg-emerald-600 hover:bg-emerald-700 relative overflow-hidden transition-all hover:-translate-y-1"
                   onClick={(e) => {
                     addRipple(e);
                     setShowEditDialog(true);
@@ -260,20 +262,20 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Order
                 </Button>
-              </div>
+              </div> */}
             </CardHeader>
             <CardContent className="p-0">
               <Tabs defaultValue="details">
                 <TabsList className="p-4 justify-start gap-2 bg-transparent">
                   <TabsTrigger
                     value="details"
-                    className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                    className="rounded-xl data-[state=active]:bg-green-50 data-[state=active]:text-green-700 relative transition-all"
                   >
                     Order Details
                   </TabsTrigger>
                   <TabsTrigger
                     value="timeline"
-                    className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+                    className="rounded-xl data-[state=active]:bg-green-50 data-[state=active]:text-green-700 relative transition-all"
                   >
                     Timeline
                   </TabsTrigger>
@@ -291,31 +293,31 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                             <Avatar className="h-10 w-10">
                               <AvatarImage
                                 src="/placeholder.svg?height=40&width=40"
-                                alt={order.customer.name}
+                                alt={orderDetails.user.name}
                               />
                               <AvatarFallback>
-                                {order.customer.name
+                                {orderDetails.user.name
                                   .substring(0, 2)
                                   .toUpperCase()}
                               </AvatarFallback>
                             </Avatar>
                             <div>
                               <div className="font-medium">
-                                {order.customer.name}
+                                {orderDetails.user.name}
                               </div>
                               <div className="text-sm text-muted-foreground">
-                                {order.customer.email}
+                                {orderDetails.user.email}
                               </div>
                             </div>
                           </div>
                           <div className="space-y-2 text-sm">
                             <div className="flex items-center gap-2">
                               <Phone className="h-4 w-4 text-gray-400" />
-                              {order.customer.phone}
+                              {orderDetails.user.phone}
                             </div>
                             <div className="flex items-start gap-2">
                               <MapPin className="h-4 w-4 text-gray-400 mt-0.5" />
-                              <span>{order.customer.address}</span>
+                              <span>{orderDetails.user.address}</span>
                             </div>
                           </div>
                           <div className="mt-3">
@@ -325,7 +327,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                               className="rounded-xl w-full relative overflow-hidden transition-all hover:-translate-y-1"
                               asChild
                             >
-                              <Link href={`/admin/users/${order.customer.id}`}>
+                              <Link href={`/users/${orderDetails.user.id}`}>
                                 <User className="h-3 w-3 mr-2" />
                                 View Customer Profile
                               </Link>
@@ -342,7 +344,9 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                           <div className="space-y-2 text-sm">
                             <div className="flex items-start gap-2">
                               <MapPin className="h-4 w-4 text-gray-400 mt-0.5" />
-                              <span>{order.delivery.address}</span>
+                              <span>
+                                {orderDetails.delivery.delivery_address}
+                              </span>
                             </div>
                             <div className="flex items-start gap-2">
                               <svg
@@ -359,14 +363,18 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                               >
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                               </svg>
-                              <span>{order.delivery.instructions}</span>
+                              <span>
+                                {orderDetails.delivery.delivery_instructions ||
+                                  "N/A"}
+                              </span>
                             </div>
                             <div className="flex items-center gap-2">
                               <Clock className="h-4 w-4 text-gray-400" />
-                              Estimated delivery: {order.delivery.estimatedTime}
+                              Delivery date:{" "}
+                              {orderDetails.delivery.delivery_date}
                             </div>
                           </div>
-                          <Separator className="my-3" />
+                          {/* <Separator className="my-3" />
                           <div className="space-y-2 text-sm">
                             <div className="font-medium">
                               Driver Information
@@ -384,7 +392,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                               {order.delivery.driver.vehicle} (
                               {order.delivery.driver.licensePlate})
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -396,7 +404,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                         </h3>
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <div className="space-y-3">
-                            {order.items.map((item) => (
+                            {orderDetails.items.map((item: any) => (
                               <div
                                 key={item.id}
                                 className="flex items-center justify-between py-2"
@@ -404,14 +412,17 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                                 <div className="flex items-center gap-3">
                                   <div className="h-10 w-10 rounded-md overflow-hidden bg-white">
                                     <img
-                                      src={item.image || "/placeholder.svg"}
-                                      alt={item.name}
+                                      src={
+                                        item.recipe.image_url ||
+                                        "/placeholder.svg"
+                                      }
+                                      alt={item.recipe.name}
                                       className="h-full w-full object-cover"
                                     />
                                   </div>
                                   <div>
                                     <div className="font-medium text-sm">
-                                      {item.name}
+                                      {item.recipe.name}
                                     </div>
                                     <div className="text-xs text-muted-foreground">
                                       {item.price} x {item.quantity}
@@ -428,22 +439,22 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                               <span className="text-muted-foreground">
                                 Subtotal
                               </span>
-                              <span>{order.payment.subtotal}</span>
+                              <span>₵{orderDetails.payment.amount}</span>
                             </div>
-                            <div className="flex justify-between text-sm">
+                            {/* <div className="flex justify-between text-sm">
                               <span className="text-muted-foreground">Tax</span>
-                              <span>{order.payment.tax}</span>
-                            </div>
+                              <span>{orderDetails.payment.tax || 0.0}</span>
+                            </div> */}
                             <div className="flex justify-between text-sm">
                               <span className="text-muted-foreground">
                                 Delivery
                               </span>
-                              <span>{order.payment.delivery}</span>
+                              <span>₵{(0.0).toFixed(2)}</span>
                             </div>
                             <Separator className="my-2" />
                             <div className="flex justify-between font-medium">
                               <span>Total</span>
-                              <span>{order.payment.total}</span>
+                              <span>₵{orderDetails.payment.amount}</span>
                             </div>
                           </div>
                         </div>
@@ -476,7 +487,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                               </span>
                               <Link
                                 href={`/admin/payments/${order.payment.transactionId}`}
-                                className="text-indigo-600 hover:underline"
+                                className="text-emerald-600 hover:underline"
                               >
                                 {order.payment.transactionId}
                               </Link>
@@ -515,7 +526,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                             <div
                               className={`h-8 w-8 rounded-full flex items-center justify-center ${
                                 event.time
-                                  ? "bg-indigo-100 text-indigo-600"
+                                  ? "bg-emerald-100 text-emerald-600"
                                   : "bg-gray-100 text-gray-400 border border-dashed border-gray-300"
                               }`}
                             >
@@ -525,7 +536,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                               <div
                                 className={`h-full w-0.5 ${
                                   event.time
-                                    ? "bg-indigo-100"
+                                    ? "bg-green-100"
                                     : "bg-gray-100 border-dashed"
                                 }`}
                                 style={{ height: "30px" }}
@@ -563,13 +574,13 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
 
         <div className="w-full md:w-1/3 space-y-6">
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Order Actions</CardTitle>
               <CardDescription>Manage this order</CardDescription>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               <Button
-                className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 relative overflow-hidden transition-all hover:-translate-y-1"
+                className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 relative overflow-hidden transition-all hover:-translate-y-1"
                 onClick={(e) => {
                   addRipple(e);
                   setShowEditDialog(true);
@@ -607,7 +618,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
           </Card>
 
           <Card className="rounded-xl border-none shadow-md overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
               <CardTitle>Customer Notes</CardTitle>
               <CardDescription>Add notes about this order</CardDescription>
             </CardHeader>
@@ -616,7 +627,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
                 placeholder="Add notes about this order or customer..."
                 className="resize-none min-h-[100px]"
               />
-              <Button className="w-full mt-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 relative overflow-hidden transition-all hover:-translate-y-1">
+              <Button className="w-full mt-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 relative overflow-hidden transition-all hover:-translate-y-1">
                 Save Notes
               </Button>
             </CardContent>
@@ -677,7 +688,7 @@ export function OrderDetails({ orderId }: OrderDetailsProps) {
             <Button
               onClick={() => handleStatusChange(orderStatus)}
               disabled={isSubmitting}
-              className="bg-indigo-600 hover:bg-indigo-700"
+              className="bg-emerald-600 hover:bg-emerald-700"
             >
               {isSubmitting ? "Updating..." : "Update Status"}
             </Button>
