@@ -46,9 +46,11 @@ import { UserProfileDialog } from "@/components/admin/UserProfileDialog";
 import { UserEditForm } from "@/components/admin/UserEditForm";
 import { DeleteUserDialog } from "@/components/admin/DeleteUserDialog";
 import { EmptyUsersState } from "@/components/admin/EmptyStates";
+import { format, isValid } from "date-fns";
+
 import Link from "next/link";
 
-export function UserManagement() {
+export function UserManagement({ users }: { users: any }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,152 +63,152 @@ export function UserManagement() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Sample user data
-  const users = [
-    {
-      id: "USR-1001",
-      name: "Alex Johnson",
-      email: "alex.johnson@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Premium",
-      joinDate: "Jan 15, 2023",
-      lastOrder: "Apr 11, 2023",
-    },
-    {
-      id: "USR-1002",
-      name: "Sarah Williams",
-      email: "sarah.williams@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Basic",
-      joinDate: "Feb 3, 2023",
-      lastOrder: "Apr 10, 2023",
-    },
-    {
-      id: "USR-1003",
-      name: "Michael Brown",
-      email: "michael.brown@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Premium",
-      joinDate: "Dec 12, 2022",
-      lastOrder: "Apr 9, 2023",
-    },
-    {
-      id: "USR-1004",
-      name: "Emily Davis",
-      email: "emily.davis@example.com",
-      status: "Inactive",
-      role: "Customer",
-      subscriptionPlan: "Basic",
-      joinDate: "Mar 5, 2023",
-      lastOrder: "Mar 28, 2023",
-    },
-    {
-      id: "USR-1005",
-      name: "David Wilson",
-      email: "david.wilson@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Premium",
-      joinDate: "Jan 20, 2023",
-      lastOrder: "Apr 8, 2023",
-    },
-    {
-      id: "USR-1006",
-      name: "Jessica Martinez",
-      email: "jessica.martinez@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Basic",
-      joinDate: "Feb 15, 2023",
-      lastOrder: "Apr 7, 2023",
-    },
-    {
-      id: "USR-1007",
-      name: "James Taylor",
-      email: "james.taylor@example.com",
-      status: "Suspended",
-      role: "Customer",
-      subscriptionPlan: "Premium",
-      joinDate: "Nov 8, 2022",
-      lastOrder: "Mar 15, 2023",
-    },
-    {
-      id: "USR-1008",
-      name: "Olivia Anderson",
-      email: "olivia.anderson@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Basic",
-      joinDate: "Mar 1, 2023",
-      lastOrder: "Apr 5, 2023",
-    },
-    {
-      id: "USR-1009",
-      name: "Daniel Thomas",
-      email: "daniel.thomas@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Premium",
-      joinDate: "Jan 5, 2023",
-      lastOrder: "Apr 3, 2023",
-    },
-    {
-      id: "USR-1010",
-      name: "Sophia Jackson",
-      email: "sophia.jackson@example.com",
-      status: "Inactive",
-      role: "Customer",
-      subscriptionPlan: "Basic",
-      joinDate: "Feb 20, 2023",
-      lastOrder: "Mar 10, 2023",
-    },
-    {
-      id: "USR-1011",
-      name: "Matthew White",
-      email: "matthew.white@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Premium",
-      joinDate: "Dec 5, 2022",
-      lastOrder: "Apr 1, 2023",
-    },
-    {
-      id: "USR-1012",
-      name: "Ava Harris",
-      email: "ava.harris@example.com",
-      status: "Active",
-      role: "Customer",
-      subscriptionPlan: "Basic",
-      joinDate: "Mar 15, 2023",
-      lastOrder: "Mar 30, 2023",
-    },
-    {
-      id: "ADM-1001",
-      name: "John Smith",
-      email: "john.smith@mealbox.com",
-      status: "Active",
-      role: "Admin",
-      subscriptionPlan: "N/A",
-      joinDate: "Jan 1, 2022",
-      lastOrder: "N/A",
-    },
-    {
-      id: "ADM-1002",
-      name: "Lisa Johnson",
-      email: "lisa.johnson@mealbox.com",
-      status: "Active",
-      role: "Admin",
-      subscriptionPlan: "N/A",
-      joinDate: "Jan 1, 2022",
-      lastOrder: "N/A",
-    },
-  ];
+  //   const users = [
+  //     {
+  //       id: "USR-1001",
+  //       name: "Alex Johnson",
+  //       email: "alex.johnson@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Premium",
+  //       joinDate: "Jan 15, 2023",
+  //       lastOrder: "Apr 11, 2023",
+  //     },
+  //     {
+  //       id: "USR-1002",
+  //       name: "Sarah Williams",
+  //       email: "sarah.williams@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Basic",
+  //       joinDate: "Feb 3, 2023",
+  //       lastOrder: "Apr 10, 2023",
+  //     },
+  //     {
+  //       id: "USR-1003",
+  //       name: "Michael Brown",
+  //       email: "michael.brown@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Premium",
+  //       joinDate: "Dec 12, 2022",
+  //       lastOrder: "Apr 9, 2023",
+  //     },
+  //     {
+  //       id: "USR-1004",
+  //       name: "Emily Davis",
+  //       email: "emily.davis@example.com",
+  //       status: "Inactive",
+  //       role: "Customer",
+  //       subscriptionPlan: "Basic",
+  //       joinDate: "Mar 5, 2023",
+  //       lastOrder: "Mar 28, 2023",
+  //     },
+  //     {
+  //       id: "USR-1005",
+  //       name: "David Wilson",
+  //       email: "david.wilson@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Premium",
+  //       joinDate: "Jan 20, 2023",
+  //       lastOrder: "Apr 8, 2023",
+  //     },
+  //     {
+  //       id: "USR-1006",
+  //       name: "Jessica Martinez",
+  //       email: "jessica.martinez@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Basic",
+  //       joinDate: "Feb 15, 2023",
+  //       lastOrder: "Apr 7, 2023",
+  //     },
+  //     {
+  //       id: "USR-1007",
+  //       name: "James Taylor",
+  //       email: "james.taylor@example.com",
+  //       status: "Suspended",
+  //       role: "Customer",
+  //       subscriptionPlan: "Premium",
+  //       joinDate: "Nov 8, 2022",
+  //       lastOrder: "Mar 15, 2023",
+  //     },
+  //     {
+  //       id: "USR-1008",
+  //       name: "Olivia Anderson",
+  //       email: "olivia.anderson@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Basic",
+  //       joinDate: "Mar 1, 2023",
+  //       lastOrder: "Apr 5, 2023",
+  //     },
+  //     {
+  //       id: "USR-1009",
+  //       name: "Daniel Thomas",
+  //       email: "daniel.thomas@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Premium",
+  //       joinDate: "Jan 5, 2023",
+  //       lastOrder: "Apr 3, 2023",
+  //     },
+  //     {
+  //       id: "USR-1010",
+  //       name: "Sophia Jackson",
+  //       email: "sophia.jackson@example.com",
+  //       status: "Inactive",
+  //       role: "Customer",
+  //       subscriptionPlan: "Basic",
+  //       joinDate: "Feb 20, 2023",
+  //       lastOrder: "Mar 10, 2023",
+  //     },
+  //     {
+  //       id: "USR-1011",
+  //       name: "Matthew White",
+  //       email: "matthew.white@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Premium",
+  //       joinDate: "Dec 5, 2022",
+  //       lastOrder: "Apr 1, 2023",
+  //     },
+  //     {
+  //       id: "USR-1012",
+  //       name: "Ava Harris",
+  //       email: "ava.harris@example.com",
+  //       status: "Active",
+  //       role: "Customer",
+  //       subscriptionPlan: "Basic",
+  //       joinDate: "Mar 15, 2023",
+  //       lastOrder: "Mar 30, 2023",
+  //     },
+  //     {
+  //       id: "ADM-1001",
+  //       name: "John Smith",
+  //       email: "john.smith@mealbox.com",
+  //       status: "Active",
+  //       role: "Admin",
+  //       subscriptionPlan: "N/A",
+  //       joinDate: "Jan 1, 2022",
+  //       lastOrder: "N/A",
+  //     },
+  //     {
+  //       id: "ADM-1002",
+  //       name: "Lisa Johnson",
+  //       email: "lisa.johnson@mealbox.com",
+  //       status: "Active",
+  //       role: "Admin",
+  //       subscriptionPlan: "N/A",
+  //       joinDate: "Jan 1, 2022",
+  //       lastOrder: "N/A",
+  //     },
+  //   ];
 
   // Filter users based on search term
   const filteredUsers = users.filter(
-    (user) =>
+    (user: any) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.id.toLowerCase().includes(searchTerm.toLowerCase())
@@ -266,7 +268,15 @@ export function UserManagement() {
 
   // Find selected user data
   const selectedUserData =
-    users.find((user) => user.id === selectedUser) || users[0];
+    users.find((user: any) => user.id === selectedUser) || users[0];
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    if (!isValid(date)) {
+      return "Invalid date";
+    }
+    return format(date, "MMMM d, yyyy");
+  };
 
   if (showEmptyState) {
     return (
@@ -449,7 +459,7 @@ export function UserManagement() {
                   </TableHeader>
                   <TableBody>
                     {currentItems.length > 0 ? (
-                      currentItems.map((user, index) => (
+                      currentItems.map((user: any, index: number) => (
                         <TableRow
                           key={user.id}
                           className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
@@ -479,7 +489,7 @@ export function UserManagement() {
                             </div>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
-                            {user.id}
+                            USR-{index}
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Badge
@@ -494,7 +504,8 @@ export function UserManagement() {
                                   : ""
                               }`}
                             >
-                              {user.status}
+                              {/* {user.status} */}
+                              Active
                             </Badge>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
@@ -522,13 +533,13 @@ export function UserManagement() {
                             )}
                           </TableCell> */}
                           <TableCell className="py-3 px-4 border-t border-gray-100">
-                            {user.joinDate}
+                            {formatDate(user.created_at)}
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             {user.lastOrder === "N/A" ? (
                               <span className="text-muted-foreground">N/A</span>
                             ) : (
-                              user.lastOrder
+                              formatDate(user.last_order_date)
                             )}
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
