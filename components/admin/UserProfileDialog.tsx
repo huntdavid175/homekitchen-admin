@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,61 +16,108 @@ import { UserOrdersTable } from "@/components/admin/UserOrdersTable";
 import { UserEditForm } from "@/components/admin/UserEditForm";
 import { DeleteUserDialog } from "@/components/admin/DeleteUserDialog";
 import Link from "next/link";
+import { createClient } from "@/utils/supabase/client";
+import { formatDate } from "@/lib/helpers";
 
 interface UserProfileDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   userId?: string;
+  userEmail?: string;
 }
 
 export function UserProfileDialog({
   open,
   onOpenChange,
   userId = "USR-1001",
+  userEmail,
 }: UserProfileDialogProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // This would normally come from an API call using the userId
-  const user = {
-    id: userId,
-    name: "Alex Johnson",
-    email: "alex.johnson@example.com",
-    phone: "(555) 123-4567",
-    status: "Active",
-    role: "Customer",
-    subscriptionPlan: "Premium",
-    joinDate: "Jan 15, 2023",
-    lastOrder: "Apr 11, 2023",
-    totalOrders: 12,
-    totalSpent: "$729.52",
-    address: {
-      street: "123 Main Street, Apt 4B",
-      city: "New York",
-      state: "NY",
-      zip: "10001",
-      country: "United States",
-    },
-    paymentMethods: [
-      {
-        type: "Visa",
-        last4: "4242",
-        expiry: "04/25",
-        isDefault: true,
-      },
-      {
-        type: "Mastercard",
-        last4: "8888",
-        expiry: "09/24",
-        isDefault: false,
-      },
-    ],
-    preferences: {
-      dietaryRestrictions: ["Gluten-Free", "Low Carb"],
-      allergies: ["Nuts"],
-      favoriteCategories: ["Italian", "Asian Fusion", "Mediterranean"],
-    },
-  };
+  useEffect(() => {
+    async function fetchUserProfile() {
+      if (!open || !userEmail) return;
+
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Get Supabase client and session
+        const supabase = createClient();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+          throw new Error("No active session");
+        }
+
+        // Fetch user profile
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/users/${userEmail}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch user profile: ${response.statusText}`
+          );
+        }
+
+        const userData = await response.json();
+        console.log(userData);
+        setUser(userData);
+      } catch (err: any) {
+        console.error("Error fetching user profile:", err);
+        setError(err.message || "Failed to load user profile");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUserProfile();
+  }, [open, userEmail]);
+
+  if (!user && !loading) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent className="sm:max-w-[900px] p-6 rounded-xl border-none shadow-lg">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-red-600">Error</h3>
+            <p className="text-muted-foreground">
+              {error || "Failed to load user profile"}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogTitle>Loading</DialogTitle>
+        <DialogContent className="sm:max-w-[900px] p-6 rounded-xl border-none shadow-lg">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold">Loading...</h3>
+            <p className="text-muted-foreground">
+              Please wait while we fetch the user profile
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <>
@@ -131,27 +178,18 @@ export function UserProfileDialog({
                           : ""
                       }`}
                     >
-                      {user.status}
+                      {/* {user.status} */}
+                      Active
                     </Badge>
                     <Badge
                       variant="outline"
                       className={`rounded-full px-3 py-1 text-xs font-medium ${
-                        user.role === "Admin"
+                        user.role === "admin"
                           ? "bg-purple-50 text-purple-700 hover:bg-purple-50 hover:text-purple-700"
                           : "bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700"
                       }`}
                     >
                       {user.role}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
-                        user.subscriptionPlan === "Premium"
-                          ? "bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700"
-                          : "bg-teal-50 text-teal-700 hover:bg-teal-50 hover:text-teal-700"
-                      }`}
-                    >
-                      {user.subscriptionPlan} Plan
                     </Badge>
                   </div>
                 </div>
@@ -163,46 +201,40 @@ export function UserProfileDialog({
                   <div>
                     <p className="text-sm font-medium">Member Since</p>
                     <p className="text-sm text-muted-foreground">
-                      {user.joinDate}
+                      {formatDate(user.created_at)}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="h-5 w-5 text-indigo-500 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground">
-                      {user.phone}
-                    </p>
+                {user.phone && (
+                  <div className="flex items-start gap-3">
+                    <Phone className="h-5 w-5 text-indigo-500 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Phone</p>
+                      <p className="text-sm text-muted-foreground">
+                        {user.phone}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-indigo-500 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Address</p>
-                    <p className="text-sm text-muted-foreground">
-                      {user.address.street}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {user.address.city}, {user.address.state}{" "}
-                      {user.address.zip}
-                    </p>
+                )}
+                {user.address && (
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-indigo-500 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Address</p>
+                      <p className="text-sm text-muted-foreground">
+                        {user.address}
+                      </p>
+                      {/* <p className="text-sm text-muted-foreground">
+                        {user.address.city}, {user.address.state}{" "}
+                        {user.address.zip}
+                      </p> */}
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CreditCard className="h-5 w-5 text-indigo-500 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Payment Method</p>
-                    <p className="text-sm text-muted-foreground">
-                      {user.paymentMethods[0].type} ••••{" "}
-                      {user.paymentMethods[0].last4}
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <Card className="rounded-xl border shadow-sm">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">
@@ -210,9 +242,14 @@ export function UserProfileDialog({
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{user.totalOrders}</div>
+                  <div className="text-2xl font-bold">
+                    {user.total_orders || 0}
+                  </div>
                   <p className="text-xs text-muted-foreground">
-                    Last order on {user.lastOrder}
+                    Last order on{" "}
+                    {user.last_order_date
+                      ? formatDate(user.last_order_date)
+                      : "N/A"}
                   </p>
                 </CardContent>
               </Card>
@@ -223,24 +260,11 @@ export function UserProfileDialog({
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{user.totalSpent}</div>
-                  <p className="text-xs text-muted-foreground">
-                    Lifetime value
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="rounded-xl border shadow-sm">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Subscription
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
                   <div className="text-2xl font-bold">
-                    {user.subscriptionPlan}
+                    ₵{user.total_spent || 0}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Active since {user.joinDate}
+                    Lifetime value
                   </p>
                 </CardContent>
               </Card>
@@ -262,7 +286,7 @@ export function UserProfileDialog({
 
             <Card className="rounded-xl border shadow-sm">
               <CardContent className="p-0">
-                <UserOrdersTable userId={userId} limit={5} />
+                <UserOrdersTable recentOrders={user.recent_orders} />
               </CardContent>
             </Card>
           </div>

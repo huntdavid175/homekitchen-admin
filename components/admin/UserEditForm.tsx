@@ -223,7 +223,7 @@ export function UserEditForm({ open, onOpenChange, user }: UserEditFormProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="address" className="space-y-4">
+            {/* <TabsContent value="address" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="street">Street Address</Label>
                 <Input
@@ -301,9 +301,9 @@ export function UserEditForm({ open, onOpenChange, user }: UserEditFormProps) {
                   />
                 </div>
               </div>
-            </TabsContent>
+            </TabsContent> */}
 
-            <TabsContent value="preferences" className="space-y-6">
+            {/* <TabsContent value="preferences" className="space-y-6">
               <div className="space-y-4">
                 <Label>Dietary Restrictions</Label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -470,9 +470,9 @@ export function UserEditForm({ open, onOpenChange, user }: UserEditFormProps) {
                   </Button>
                 </div>
               </div>
-            </TabsContent>
+            </TabsContent> */}
 
-            <TabsContent value="subscription" className="space-y-4">
+            {/* <TabsContent value="subscription" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="subscriptionPlan">Subscription Plan</Label>
                 <Select
@@ -503,7 +503,7 @@ export function UserEditForm({ open, onOpenChange, user }: UserEditFormProps) {
                   className="rounded-lg min-h-[100px]"
                 />
               </div>
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
 
           <DialogFooter className="mt-6">

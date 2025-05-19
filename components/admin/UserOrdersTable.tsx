@@ -10,77 +10,77 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDate } from "@/lib/helpers";
 import { Calendar, Eye } from "lucide-react";
 import Link from "next/link";
 
 interface UserOrdersTableProps {
-  userId: string;
-  limit?: number;
+  recentOrders: any;
 }
 
-export function UserOrdersTable({ userId, limit }: UserOrdersTableProps) {
+export function UserOrdersTable({ recentOrders }: UserOrdersTableProps) {
   // This would normally come from an API call using the userId
-  const orders = [
-    {
-      id: "ORD-7291",
-      date: "April 11, 2023",
-      status: "Delivered",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-6384",
-      date: "April 10, 2023",
-      status: "Preparing",
-      items: 3,
-      total: "$44.97",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-5127",
-      date: "April 9, 2023",
-      status: "Ready",
-      items: 4,
-      total: "$59.96",
-      payment: "Mastercard •••• 8888",
-    },
-    {
-      id: "ORD-4982",
-      date: "April 8, 2023",
-      status: "Confirmed",
-      items: 2,
-      total: "$29.98",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-3756",
-      date: "April 7, 2023",
-      status: "Pending",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-2891",
-      date: "April 6, 2023",
-      status: "Cancelled",
-      items: 3,
-      total: "$44.97",
-      payment: "Mastercard •••• 8888",
-    },
-    {
-      id: "ORD-1745",
-      date: "April 5, 2023",
-      status: "Delivered",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-  ];
+  //   const orders = [
+  //     {
+  //       id: "ORD-7291",
+  //       date: "April 11, 2023",
+  //       status: "Delivered",
+  //       items: 4,
+  //       total: "$59.96",
+  //       payment: "Visa •••• 4242",
+  //     },
+  //     {
+  //       id: "ORD-6384",
+  //       date: "April 10, 2023",
+  //       status: "Preparing",
+  //       items: 3,
+  //       total: "$44.97",
+  //       payment: "Visa •••• 4242",
+  //     },
+  //     {
+  //       id: "ORD-5127",
+  //       date: "April 9, 2023",
+  //       status: "Ready",
+  //       items: 4,
+  //       total: "$59.96",
+  //       payment: "Mastercard •••• 8888",
+  //     },
+  //     {
+  //       id: "ORD-4982",
+  //       date: "April 8, 2023",
+  //       status: "Confirmed",
+  //       items: 2,
+  //       total: "$29.98",
+  //       payment: "Visa •••• 4242",
+  //     },
+  //     {
+  //       id: "ORD-3756",
+  //       date: "April 7, 2023",
+  //       status: "Pending",
+  //       items: 4,
+  //       total: "$59.96",
+  //       payment: "Visa •••• 4242",
+  //     },
+  //     {
+  //       id: "ORD-2891",
+  //       date: "April 6, 2023",
+  //       status: "Cancelled",
+  //       items: 3,
+  //       total: "$44.97",
+  //       payment: "Mastercard •••• 8888",
+  //     },
+  //     {
+  //       id: "ORD-1745",
+  //       date: "April 5, 2023",
+  //       status: "Delivered",
+  //       items: 4,
+  //       total: "$59.96",
+  //       payment: "Visa •••• 4242",
+  //     },
+  //   ];
 
   // Apply limit if provided
-  const displayedOrders = limit ? orders.slice(0, limit) : orders;
+  //   const displayedOrders = limit ? orders.slice(0, limit) : orders;
 
   return (
     <div className="overflow-x-auto">
@@ -109,18 +109,18 @@ export function UserOrdersTable({ userId, limit }: UserOrdersTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {displayedOrders.map((order, index) => (
+          {recentOrders.map((order: any, index: number) => (
             <TableRow
               key={order.id}
               className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
               style={{ animationDelay: `${0.1 + index * 0.1}s` }}
             >
               <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
-                {order.id}
+                ORD-{index}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100 flex items-center gap-2">
                 <Calendar className="h-3 w-3 text-muted-foreground" />
-                {order.date}
+                {formatDate(order.created_at)}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
                 <Badge
@@ -145,13 +145,16 @@ export function UserOrdersTable({ userId, limit }: UserOrdersTableProps) {
                 </Badge>
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
-                {order.items} items
+                {`${order.order_items.length} item${
+                  order.order_items.length > 1 ? "s" : ""
+                }`}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
-                {order.payment}
+                {/* {order.payment} */}
+                Visa •••• 4242
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100 text-right font-medium">
-                {order.total}
+                ₵{order.total_price}
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100">
                 <Button

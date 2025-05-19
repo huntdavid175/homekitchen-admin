@@ -251,7 +251,7 @@ export function UserManagement({ users }: { users: any }) {
   };
 
   // Handle user actions
-  const handleViewProfile = (userId: string) => {
+  const handleViewProfile = (userId: string, userEmail: string) => {
     setSelectedUser(userId);
     setShowProfileDialog(true);
   };
@@ -560,7 +560,9 @@ export function UserManagement({ users }: { users: any }) {
                                 className="rounded-xl"
                               >
                                 <DropdownMenuItem
-                                  onClick={() => handleViewProfile(user.id)}
+                                  onClick={() =>
+                                    handleViewProfile(user.id, user.email)
+                                  }
                                 >
                                   View Profile
                                 </DropdownMenuItem>
@@ -710,6 +712,7 @@ export function UserManagement({ users }: { users: any }) {
             open={showProfileDialog}
             onOpenChange={setShowProfileDialog}
             userId={selectedUser}
+            userEmail={selectedUserData?.email}
           />
           <UserEditForm
             open={showEditDialog}

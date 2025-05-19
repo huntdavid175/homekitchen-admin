@@ -41,140 +41,60 @@ import {
   Search,
 } from "lucide-react";
 import Link from "next/link";
+import { formatDate } from "@/lib/helpers";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface UserOrdersListProps {
   userId: string;
+  initialOrders: any[];
+  totalOrders: number;
+  currentPage: number;
+  totalPages: number;
 }
 
-export function UserOrdersList({ userId }: UserOrdersListProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+export function UserOrdersList({
+  userId,
+  initialOrders,
+  totalOrders,
+  currentPage: initialPage,
+  totalPages,
+}: UserOrdersListProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
 
   // This would normally come from an API call using the userId
   const user = {
     id: userId,
-    name: "Alex Johnson",
+    name: initialOrders[0]?.user?.name || "Customer",
   };
 
-  // Sample order data
-  const orders = [
-    {
-      id: "ORD-7291",
-      date: "April 11, 2023",
-      status: "Delivered",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-6384",
-      date: "April 10, 2023",
-      status: "Preparing",
-      items: 3,
-      total: "$44.97",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-5127",
-      date: "April 9, 2023",
-      status: "Ready",
-      items: 4,
-      total: "$59.96",
-      payment: "Mastercard •••• 8888",
-    },
-    {
-      id: "ORD-4982",
-      date: "April 8, 2023",
-      status: "Confirmed",
-      items: 2,
-      total: "$29.98",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-3756",
-      date: "April 7, 2023",
-      status: "Pending",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-2891",
-      date: "April 6, 2023",
-      status: "Cancelled",
-      items: 3,
-      total: "$44.97",
-      payment: "Mastercard •••• 8888",
-    },
-    {
-      id: "ORD-1745",
-      date: "April 5, 2023",
-      status: "Delivered",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-1632",
-      date: "April 4, 2023",
-      status: "Delivered",
-      items: 3,
-      total: "$44.97",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-1521",
-      date: "April 3, 2023",
-      status: "Delivered",
-      items: 4,
-      total: "$59.96",
-      payment: "Mastercard •••• 8888",
-    },
-    {
-      id: "ORD-1423",
-      date: "April 2, 2023",
-      status: "Delivered",
-      items: 2,
-      total: "$29.98",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-1312",
-      date: "April 1, 2023",
-      status: "Delivered",
-      items: 4,
-      total: "$59.96",
-      payment: "Visa •••• 4242",
-    },
-    {
-      id: "ORD-1201",
-      date: "March 31, 2023",
-      status: "Delivered",
-      items: 3,
-      total: "$44.97",
-      payment: "Mastercard •••• 8888",
-    },
-  ];
-
   // Filter orders based on search term
-  const filteredOrders = orders.filter(
+  const filteredOrders = initialOrders.filter(
     (order) =>
       order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
-
   // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  const nextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const nextPage = () => {
+    const nextPageNumber = Math.min(currentPage + 1, totalPages);
+    paginate(nextPageNumber);
+  };
+
+  const prevPage = () => {
+    const prevPageNumber = Math.max(currentPage - 1, 1);
+    paginate(prevPageNumber);
+  };
 
   // Add ripple effect to buttons
   const addRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -202,10 +122,10 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
 
   return (
     <Card className="rounded-xl border-none shadow-md overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
+      <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <CardTitle>Orders for {user.name}</CardTitle>
+            <CardTitle>Orders for {initialOrders[0].user.name}</CardTitle>
             <CardDescription>View and manage customer orders</CardDescription>
           </div>
           <div className="flex items-center gap-2">
@@ -261,25 +181,25 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
           <TabsList className="p-4 justify-start gap-2 bg-transparent">
             <TabsTrigger
               value="all"
-              className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
             >
               All Orders
             </TabsTrigger>
             <TabsTrigger
               value="active"
-              className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
             >
               Active
             </TabsTrigger>
             <TabsTrigger
               value="completed"
-              className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
             >
               Completed
             </TabsTrigger>
             <TabsTrigger
               value="cancelled"
-              className="rounded-xl data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 relative transition-all"
+              className="rounded-xl data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 relative transition-all"
             >
               Cancelled
             </TabsTrigger>
@@ -312,8 +232,8 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentItems.length > 0 ? (
-                    currentItems.map((order, index) => (
+                  {initialOrders.length > 0 ? (
+                    initialOrders.map((order, index) => (
                       <TableRow
                         key={order.id}
                         className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
@@ -328,22 +248,22 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100 flex items-center gap-2">
                           <Calendar className="h-3 w-3 text-muted-foreground" />
-                          {order.date}
+                          {formatDate(order.created_at)}
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
                           <Badge
                             variant="outline"
                             className={`rounded-full px-3 py-1 text-xs font-medium ${
                               order.status === "Delivered"
-                                ? "bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700"
+                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                                 : order.status === "Preparing"
-                                ? "bg-purple-50 text-purple-700 hover:bg-purple-50 hover:text-purple-700"
+                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                                 : order.status === "Pending"
                                 ? "bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700"
                                 : order.status === "Confirmed"
-                                ? "bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700"
+                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                                 : order.status === "Ready"
-                                ? "bg-teal-50 text-teal-700 hover:bg-teal-50 hover:text-teal-700"
+                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                                 : order.status === "Cancelled"
                                 ? "bg-red-50 text-red-700 hover:bg-red-50 hover:text-red-700"
                                 : ""
@@ -353,17 +273,18 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
                           </Badge>
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
-                          {order.items} items
+                          {order.items.length} items
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
-                          {order.payment}
+                          {/* {order.payment} */}
+                          Mastercard •••• 8888
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100 text-right font-medium">
-                          {order.total}
+                          ₵{order.total_price}
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
                           <div className="flex items-center gap-2">
-                            <Button
+                            {/* <Button
                               variant="ghost"
                               size="sm"
                               className="rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
@@ -377,7 +298,7 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
                                 <Eye className="h-3 w-3 mr-1" />
                                 View
                               </Link>
-                            </Button>
+                            </Button> */}
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
@@ -450,17 +371,21 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
             </div>
 
             {/* Pagination */}
-            {filteredOrders.length > 0 && (
+            {totalOrders > 0 && (
               <div className="flex items-center justify-between px-4 py-4 border-t border-gray-100">
                 <div className="text-sm text-muted-foreground">
                   Showing{" "}
-                  <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
                   <span className="font-medium">
-                    {Math.min(indexOfLastItem, filteredOrders.length)}
+                    {Math.min(
+                      (currentPage - 1) * itemsPerPage + 1,
+                      totalOrders
+                    )}
                   </span>{" "}
-                  of{" "}
-                  <span className="font-medium">{filteredOrders.length}</span>{" "}
-                  orders
+                  to{" "}
+                  <span className="font-medium">
+                    {Math.min(currentPage * itemsPerPage, totalOrders)}
+                  </span>{" "}
+                  of <span className="font-medium">{totalOrders}</span> orders
                 </div>
                 <div className="flex items-center space-x-2">
                   <Button
@@ -487,7 +412,7 @@ export function UserOrdersList({ userId }: UserOrdersListProps) {
                           size="sm"
                           className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
                             currentPage === pageNumber
-                              ? "bg-indigo-600 hover:bg-indigo-700"
+                              ? "bg-emerald-600 hover:bg-emerald-700"
                               : ""
                           }`}
                           onClick={(e) => {
