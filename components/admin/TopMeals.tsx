@@ -70,28 +70,34 @@ export function TopMeals({ showEmptyState = false, topMeals }: TopMealsProps) {
           <div className="flex items-center gap-3">
             <div className="relative h-10 w-10 overflow-hidden rounded-md">
               <Image
-                src={meal.image || "/placeholder.svg"}
+                src={
+                  meal.image ||
+                  "https://images.immediate.co.uk/production/volatile/sites/30/2024/01/Cheese-omelette-45155e3.jpg?resize=1366,1503"
+                }
                 alt={meal.name}
                 fill
                 className="object-cover"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="font-medium truncate">{meal.name}</h4>
+              <h4 className="font-medium truncate">
+                {meal.name} with {meal.subname}
+              </h4>
               <p className="text-sm text-muted-foreground">
-                {meal.orders} orders
+                {meal.order_count} orders
               </p>
             </div>
           </div>
           <Progress
             value={meal.percentage}
             className="h-2"
-            style={
-              {
-                "--progress-background":
-                  "linear-gradient(to right, #8b5cf6, #6366f1)",
-              } as React.CSSProperties
-            }
+            color="bg-red-500"
+            // style={
+            //   {
+            //     "--progress-background":
+            //       "linear-gradient(to right, #8b5cf6, #6366f1)",
+            //   } as React.CSSProperties
+            // }
           />
         </div>
       ))}

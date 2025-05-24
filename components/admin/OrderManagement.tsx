@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { updateOrderStatus } from "@/app/actions/updateOrderStatus";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -108,6 +110,18 @@ export function OrderManagement({
     setTimeout(() => {
       ripple.remove();
     }, 600);
+  };
+
+  const handleStatusUpdate = async (orderId: string, newStatus: string) => {
+    try {
+      await updateOrderStatus(orderId, newStatus);
+      toast.success("Order status updated successfully");
+      // Refresh the page to show updated data
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast.error("Failed to update order status");
+    }
   };
 
   return (
@@ -237,7 +251,8 @@ export function OrderManagement({
                         }}
                       >
                         <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
-                          {order.id}
+                          {/* {order.id} */}
+                          ORD-0{index}
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
                           {order.user.name}
@@ -250,26 +265,28 @@ export function OrderManagement({
                           <Badge
                             variant="outline"
                             className={`rounded-full px-3 py-1 text-xs font-medium ${
-                              order.status === "Delivered"
-                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Preparing"
-                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Pending"
-                                ? "bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700"
-                                : order.status === "Confirmed"
-                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
+                              order.status === "delivered"
+                                ? "bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700 animate-[pulse_2s_infinite]"
+                                : order.status === "preparing"
+                                ? "bg-purple-50 text-purple-700 hover:bg-purple-50 hover:text-purple-700 animate-[pulse_2s_infinite]"
+                                : order.status === "pending"
+                                ? "bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700 animate-[pulse_2s_infinite]"
+                                : order.status === "confirmed"
+                                ? "bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700 animate-[pulse_2s_infinite]"
                                 : order.status === "Ready"
-                                ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Cancelled"
+                                ? "bg-teal-50 text-teal-700 hover:bg-teal-50 hover:text-teal-700 animate-[pulse_2s_infinite]"
+                                : order.status === "cancelled"
                                 ? "bg-red-50 text-red-700 hover:bg-red-50 hover:text-red-700"
                                 : ""
                             }`}
                           >
-                            {order.status}
+                            {order.status.charAt(0).toUpperCase() +
+                              order.status.slice(1)}
                           </Badge>
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
-                          {order.items.length} items
+                          {order.items.length}{" "}
+                          {`item${order.items.length > 1 ? "s" : ""}`}
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
                           Mastercard •••• 8888
@@ -305,32 +322,60 @@ export function OrderManagement({
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>Edit Order</DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                {order.status === "Pending" && (
-                                  <DropdownMenuItem className="text-blue-600">
+                                {order.status === "pending" && (
+                                  <DropdownMenuItem
+                                    className="text-blue-600"
+                                    onClick={() =>
+                                      handleStatusUpdate(order.id, "confirmed")
+                                    }
+                                  >
                                     Confirm Order
                                   </DropdownMenuItem>
                                 )}
-                                {(order.status === "Pending" ||
-                                  order.status === "Confirmed") && (
-                                  <DropdownMenuItem className="text-purple-600">
+                                {(order.status === "pending" ||
+                                  order.status === "confirmed") && (
+                                  <DropdownMenuItem
+                                    className="text-purple-600"
+                                    onClick={() =>
+                                      handleStatusUpdate(order.id, "preparing")
+                                    }
+                                  >
                                     Mark as Preparing
                                   </DropdownMenuItem>
                                 )}
-                                {order.status === "Preparing" && (
-                                  <DropdownMenuItem className="text-teal-600">
+                                {order.status === "preparing" && (
+                                  <DropdownMenuItem
+                                    className="text-teal-600"
+                                    onClick={() =>
+                                      handleStatusUpdate(order.id, "ready")
+                                    }
+                                  >
                                     Mark as Ready
                                   </DropdownMenuItem>
                                 )}
-                                {order.status === "Ready" && (
-                                  <DropdownMenuItem className="text-green-600">
+                                {order.status === "ready" && (
+                                  <DropdownMenuItem
+                                    className="text-green-600"
+                                    onClick={() =>
+                                      handleStatusUpdate(order.id, "delivered")
+                                    }
+                                  >
                                     Mark as Delivered
                                   </DropdownMenuItem>
                                 )}
-                                {order.status !== "Delivered" &&
-                                  order.status !== "Cancelled" && (
+                                {order.status !== "delivered" &&
+                                  order.status !== "cancelled" && (
                                     <>
                                       <DropdownMenuSeparator />
-                                      <DropdownMenuItem className="text-red-600">
+                                      <DropdownMenuItem
+                                        className="text-red-600"
+                                        onClick={() =>
+                                          handleStatusUpdate(
+                                            order.id,
+                                            "cancelled"
+                                          )
+                                        }
+                                      >
                                         Cancel Order
                                       </DropdownMenuItem>
                                     </>

@@ -206,7 +206,10 @@ export function UserEditForm({ open, onOpenChange, user }: UserEditFormProps) {
                 <div className="space-y-2">
                   <Label htmlFor="role">Role</Label>
                   <Select
-                    value={formData.role}
+                    value={
+                      formData.role.charAt(0).toUpperCase() +
+                      formData.role.slice(1)
+                    }
                     onValueChange={(value) =>
                       setFormData({ ...formData, role: value })
                     }

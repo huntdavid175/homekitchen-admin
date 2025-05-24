@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       "cdn.loveandlemons.com",
       "loveandgoodstuff.com",
       "veganhuggs.com",
+      "images.immediate.co.uk",
     ], // Add your image domains here
   },
 };

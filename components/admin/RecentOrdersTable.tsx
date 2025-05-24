@@ -152,22 +152,22 @@ export function RecentOrdersTable({
                 <Badge
                   variant="outline"
                   className={`rounded-full px-3 py-1 text-xs font-medium ${
-                    order.status === "Delivered"
+                    order.status === "delivered"
                       ? "bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700 animate-[pulse_2s_infinite]"
-                      : order.status === "Preparing"
+                      : order.status === "preparing"
                       ? "bg-purple-50 text-purple-700 hover:bg-purple-50 hover:text-purple-700 animate-[pulse_2s_infinite]"
-                      : order.status === "Pending"
+                      : order.status === "pending"
                       ? "bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700 animate-[pulse_2s_infinite]"
-                      : order.status === "Confirmed"
+                      : order.status === "confirmed"
                       ? "bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700 animate-[pulse_2s_infinite]"
                       : order.status === "Ready"
                       ? "bg-teal-50 text-teal-700 hover:bg-teal-50 hover:text-teal-700 animate-[pulse_2s_infinite]"
-                      : order.status === "Cancelled"
+                      : order.status === "cancelled"
                       ? "bg-red-50 text-red-700 hover:bg-red-50 hover:text-red-700"
                       : ""
                   }`}
                 >
-                  {order.status}
+                  {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                 </Badge>
               </TableCell>
               <TableCell className="py-3 px-4 border-t border-gray-100 text-right font-medium">

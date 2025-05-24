@@ -513,7 +513,8 @@ export function UserManagement({ users }: { users: any }) {
                               variant="outline"
                               className="rounded-full px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                             >
-                              {user.role}
+                              {user.role.charAt(0).toUpperCase() +
+                                user.role.slice(1)}
                             </Badge>
                           </TableCell>
                           {/* <TableCell className="py-3 px-4 border-t border-gray-100">

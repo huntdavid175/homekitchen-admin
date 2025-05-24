@@ -53,7 +53,9 @@ import {
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { formatDate } from "@/lib/helpers";
+import { formatDate, formatTime } from "@/lib/helpers";
+import { updateOrderStatus } from "@/app/actions/updateOrderStatus";
+import { toast } from "sonner";
 
 interface OrderDetailsProps {
   orderId: string;
@@ -135,16 +137,18 @@ export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
       { status: "Delivered", time: "", date: "" },
     ],
   };
+  console.log(orderDetails);
 
   const handleStatusChange = async (newStatus: string) => {
     setIsSubmitting(true);
     try {
-      // In a real app, you would make an API call here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      setOrderStatus(newStatus);
+      await updateOrderStatus(orderId, newStatus);
+      setOrderStatus(newStatus.toLowerCase());
       setShowEditDialog(false);
+      toast.success("Order status updated successfully");
     } catch (error) {
       console.error("Error updating status:", error);
+      toast.error("Failed to update order status");
     } finally {
       setIsSubmitting(false);
     }
@@ -153,12 +157,13 @@ export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
   const handleCancelOrder = async () => {
     setIsSubmitting(true);
     try {
-      // In a real app, you would make an API call here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      setOrderStatus("Cancelled");
+      await updateOrderStatus(orderId, "cancelled");
+      setOrderStatus("cancelled");
       setShowCancelDialog(false);
+      toast.success("Order cancelled successfully");
     } catch (error) {
       console.error("Error cancelling order:", error);
+      toast.error("Failed to cancel order");
     } finally {
       setIsSubmitting(false);
     }
@@ -231,14 +236,15 @@ export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
                         : ""
                     }`}
                   >
-                    {orderDetails.status}
+                    {orderDetails.status.charAt(0).toUpperCase() +
+                      orderDetails.status.slice(1)}
                   </Badge>
                 </CardTitle>
                 <CardDescription className="flex items-center gap-2 mt-1">
                   <Calendar className="h-3 w-3" />
                   {formatDate(orderDetails.created_at)}
                   <Clock className="h-3 w-3 ml-2" />
-                  {order.time}
+                  {formatTime(orderDetails.created_at)}
                 </CardDescription>
               </div>
               {/* <div className="flex gap-2">
@@ -414,7 +420,7 @@ export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
                                     <img
                                       src={
                                         item.recipe.image_url ||
-                                        "/placeholder.svg"
+                                        "https://images.immediate.co.uk/production/volatile/sites/30/2024/01/Cheese-omelette-45155e3.jpg?resize=1366,1503"
                                       }
                                       alt={item.recipe.name}
                                       className="h-full w-full object-cover"
@@ -605,15 +611,16 @@ export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
                 <Printer className="h-4 w-4 mr-2" />
                 Print Order
               </Button>
-              {order.status !== "Delivered" && order.status !== "Cancelled" && (
-                <Button
-                  variant="destructive"
-                  className="w-full rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
-                  onClick={() => setShowCancelDialog(true)}
-                >
-                  Cancel Order
-                </Button>
-              )}
+              {orderDetails.status !== "delivered" &&
+                orderDetails.status !== "cancelled" && (
+                  <Button
+                    variant="destructive"
+                    className="w-full rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
+                    onClick={() => setShowCancelDialog(true)}
+                  >
+                    Cancel Order
+                  </Button>
+                )}
             </CardContent>
           </Card>
 
@@ -651,7 +658,10 @@ export function OrderDetails({ orderId, orderDetails }: OrderDetailsProps) {
                 Status
               </label>
               <Select
-                defaultValue={order.status}
+                defaultValue={
+                  orderDetails.status.charAt(0).toUpperCase() +
+                  orderDetails.status.slice(1)
+                }
                 onValueChange={setOrderStatus}
               >
                 <SelectTrigger id="status">

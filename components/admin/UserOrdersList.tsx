@@ -244,7 +244,8 @@ export function UserOrdersList({
                         }}
                       >
                         <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
-                          {order.id}
+                          {/* {order.id} */}
+                          ORD-0{index}
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100 flex items-center gap-2">
                           <Calendar className="h-3 w-3 text-muted-foreground" />
@@ -254,26 +255,28 @@ export function UserOrdersList({
                           <Badge
                             variant="outline"
                             className={`rounded-full px-3 py-1 text-xs font-medium ${
-                              order.status === "Delivered"
+                              order.status === "delivered"
                                 ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Preparing"
+                                : order.status === "preparing"
                                 ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Pending"
+                                : order.status === "pending"
                                 ? "bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700"
-                                : order.status === "Confirmed"
+                                : order.status === "confirmed"
                                 ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Ready"
+                                : order.status === "ready"
                                 ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
-                                : order.status === "Cancelled"
+                                : order.status === "cancelled"
                                 ? "bg-red-50 text-red-700 hover:bg-red-50 hover:text-red-700"
                                 : ""
                             }`}
                           >
-                            {order.status}
+                            {order.status.charAt(0).toUpperCase() +
+                              order.status.slice(1)}
                           </Badge>
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
-                          {order.items.length} items
+                          {order.items.length}{" "}
+                          {`item${order.items.length > 1 ? "s" : ""}`}
                         </TableCell>
                         <TableCell className="py-3 px-4 border-t border-gray-100">
                           {/* {order.payment} */}
