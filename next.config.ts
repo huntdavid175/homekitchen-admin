@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       "loveandgoodstuff.com",
       "veganhuggs.com",
       "images.immediate.co.uk",
+      "www.metro.ca",
     ], // Add your image domains here
   },
 };

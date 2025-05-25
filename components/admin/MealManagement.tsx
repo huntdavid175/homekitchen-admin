@@ -35,6 +35,7 @@ import {
   ChevronRight,
   Download,
   Edit,
+  FileTerminal,
   Filter,
   MoreHorizontal,
   Plus,
@@ -44,7 +45,7 @@ import {
 import Image from "next/image";
 import { MealForm } from "@/components/admin/MealForm";
 
-export function MealManagement() {
+export function MealManagement({ meals }: { meals: any[] }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,134 +54,134 @@ export function MealManagement() {
   const [selectedMeal, setSelectedMeal] = useState<any>(null);
 
   // Sample meal data
-  const meals = [
-    {
-      id: "MEAL-001",
-      name: "Garlic Butter Salmon",
-      category: "High Protein",
-      price: "$14.99",
-      calories: 450,
-      prepTime: "30 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-002",
-      name: "Vegetable Stir Fry",
-      category: "Vegetarian",
-      price: "$12.99",
-      calories: 320,
-      prepTime: "25 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-003",
-      name: "Chicken Fajita Bowl",
-      category: "High Protein",
-      price: "$13.99",
-      calories: 520,
-      prepTime: "35 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-004",
-      name: "Mushroom Risotto",
-      category: "Vegetarian",
-      price: "$11.99",
-      calories: 380,
-      prepTime: "40 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-005",
-      name: "Beef Tacos",
-      category: "Family Friendly",
-      price: "$15.99",
-      calories: 550,
-      prepTime: "20 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-006",
-      name: "Pasta Primavera",
-      category: "Vegetarian",
-      price: "$12.99",
-      calories: 420,
-      prepTime: "25 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-007",
-      name: "Teriyaki Chicken",
-      category: "High Protein",
-      price: "$14.99",
-      calories: 480,
-      prepTime: "30 min",
-      status: "Inactive",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-008",
-      name: "Mediterranean Salad",
-      category: "Low Calorie",
-      price: "$10.99",
-      calories: 280,
-      prepTime: "15 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-009",
-      name: "Shrimp Scampi",
-      category: "Seafood",
-      price: "$16.99",
-      calories: 420,
-      prepTime: "25 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-010",
-      name: "Quinoa Bowl",
-      category: "Vegetarian",
-      price: "$13.99",
-      calories: 350,
-      prepTime: "20 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-011",
-      name: "BBQ Pulled Pork",
-      category: "Family Friendly",
-      price: "$15.99",
-      calories: 580,
-      prepTime: "45 min",
-      status: "Inactive",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: "MEAL-012",
-      name: "Spinach and Feta Stuffed Chicken",
-      category: "High Protein",
-      price: "$14.99",
-      calories: 450,
-      prepTime: "35 min",
-      status: "Active",
-      image: "/placeholder.svg?height=60&width=60",
-    },
-  ];
+  //   const meals = [
+  //     {
+  //       id: "MEAL-001",
+  //       name: "Garlic Butter Salmon",
+  //       category: "High Protein",
+  //       price: "$14.99",
+  //       calories: 450,
+  //       prepTime: "30 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-002",
+  //       name: "Vegetable Stir Fry",
+  //       category: "Vegetarian",
+  //       price: "$12.99",
+  //       calories: 320,
+  //       prepTime: "25 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-003",
+  //       name: "Chicken Fajita Bowl",
+  //       category: "High Protein",
+  //       price: "$13.99",
+  //       calories: 520,
+  //       prepTime: "35 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-004",
+  //       name: "Mushroom Risotto",
+  //       category: "Vegetarian",
+  //       price: "$11.99",
+  //       calories: 380,
+  //       prepTime: "40 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-005",
+  //       name: "Beef Tacos",
+  //       category: "Family Friendly",
+  //       price: "$15.99",
+  //       calories: 550,
+  //       prepTime: "20 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-006",
+  //       name: "Pasta Primavera",
+  //       category: "Vegetarian",
+  //       price: "$12.99",
+  //       calories: 420,
+  //       prepTime: "25 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-007",
+  //       name: "Teriyaki Chicken",
+  //       category: "High Protein",
+  //       price: "$14.99",
+  //       calories: 480,
+  //       prepTime: "30 min",
+  //       status: "Inactive",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-008",
+  //       name: "Mediterranean Salad",
+  //       category: "Low Calorie",
+  //       price: "$10.99",
+  //       calories: 280,
+  //       prepTime: "15 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-009",
+  //       name: "Shrimp Scampi",
+  //       category: "Seafood",
+  //       price: "$16.99",
+  //       calories: 420,
+  //       prepTime: "25 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-010",
+  //       name: "Quinoa Bowl",
+  //       category: "Vegetarian",
+  //       price: "$13.99",
+  //       calories: 350,
+  //       prepTime: "20 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-011",
+  //       name: "BBQ Pulled Pork",
+  //       category: "Family Friendly",
+  //       price: "$15.99",
+  //       calories: 580,
+  //       prepTime: "45 min",
+  //       status: "Inactive",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //     {
+  //       id: "MEAL-012",
+  //       name: "Spinach and Feta Stuffed Chicken",
+  //       category: "High Protein",
+  //       price: "$14.99",
+  //       calories: 450,
+  //       prepTime: "35 min",
+  //       status: "Active",
+  //       image: "/placeholder.svg?height=60&width=60",
+  //     },
+  //   ];
 
   // Filter meals based on search term
   const filteredMeals = meals.filter(
     (meal) =>
-      meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      meal.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meal.recipe_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meal.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       meal.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -227,8 +228,31 @@ export function MealManagement() {
   };
 
   const handleEditMeal = (meal: any) => {
-    setSelectedMeal(meal);
-    setShowEditMealDialog(true);
+    // First close the dialog if it's open
+    setShowEditMealDialog(false);
+    // Then set the new meal data
+    setSelectedMeal({
+      recipe_id: meal.recipe_id,
+      recipe_name: meal.recipe_name,
+      subname: meal.subname,
+      description: meal.description,
+      difficulty: meal.difficulty,
+      cooking_time: meal.cooking_time,
+      total_time: meal.total_time,
+      price: meal.price,
+      status: meal.status,
+      image_url: meal.image_url,
+      category: meal.category,
+      ingredients: meal.ingredients,
+      cooking_tools: meal.cooking_tools,
+      cooking_steps: meal.cooking_steps,
+      nutritions: meal.nutritions,
+      tags: meal.tags,
+    });
+    // Use setTimeout to ensure the dialog is closed before opening with new data
+    setTimeout(() => {
+      setShowEditMealDialog(true);
+    }, 100);
   };
 
   const handleUpdateMeal = (values: any) => {
@@ -379,8 +403,8 @@ export function MealManagement() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {currentItems.length > 0 ? (
-                      currentItems.map((meal, index) => (
+                    {filteredMeals.length > 0 ? (
+                      filteredMeals.map((meal, index) => (
                         <TableRow
                           key={meal.id}
                           className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
@@ -394,34 +418,43 @@ export function MealManagement() {
                             <div className="flex items-center gap-3">
                               <div className="relative h-12 w-12 overflow-hidden rounded-md">
                                 <Image
-                                  src={meal.image || "/placeholder.svg"}
-                                  alt={meal.name}
+                                  src={
+                                    meal.image_url ||
+                                    "https://www.metro.ca/userfiles/image/recipes/riz-jollof-ghan%C3%A9en-poulet-salade-chou-11840.jpg"
+                                  }
+                                  alt={meal.recipe_name}
                                   fill
                                   className="object-cover"
                                 />
                               </div>
-                              <div className="font-medium">{meal.name}</div>
+                              <div className="font-medium">
+                                {meal.recipe_name}{" "}
+                                {meal.subname ? `with ${meal.subname}` : ""}
+                              </div>
                             </div>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
-                            {meal.id}
+                            {/* {meal.recipe_id} */}
+                            ML-0{index}
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Badge
                               variant="outline"
                               className="rounded-full px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700"
                             >
-                              {meal.category}
+                              {meal.category.name}
                             </Badge>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
-                            {meal.price}
+                            {/* {meal.price} */}
+                            10.13
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
-                            {meal.calories} cal
+                            {/* {meal.calories} cal */}
+                            200 cal
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
-                            {meal.prepTime}
+                            {meal.total_time} minutes
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             <Badge
@@ -432,7 +465,8 @@ export function MealManagement() {
                                   : "bg-gray-50 text-gray-700 hover:bg-gray-50 hover:text-gray-700"
                               }`}
                             >
-                              {meal.status}
+                              {/* {meal.status} */}
+                              Active
                             </Badge>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">

@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray, Control } from "react-hook-form";
 import * as z from "zod";
@@ -43,69 +43,69 @@ import { Resolver, SubmitHandler } from "react-hook-form";
 
 const ingredientSchema = z.object({
   name: z.string().min(1, "Ingredient name is required"),
+  description: z.string().optional(),
   quantity: z.string().min(1, "Quantity is required"),
   unit: z.string().optional(),
-  isShipped: z.boolean().default(true),
+  isShipped: z.boolean().default(false),
 });
 
 const toolSchema = z.object({
   name: z.string().min(1, "Tool name is required"),
+  description: z.string().optional(),
 });
 
 const stepSchema = z.object({
-  description: z.string().min(1, "Step description is required"),
-  imageUrl: z.string().optional(),
+  step_number: z.number(),
+  instruction: z.string().min(1, "Step instruction is required"),
+  image_url: z.string().optional(),
 });
 
 const nutritionSchema = z.object({
-  calories: z
-    .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-      message: "Calories must be a non-negative number.",
-    }),
-  protein: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-    message: "Protein must be a non-negative number.",
-  }),
-  carbs: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-    message: "Carbs must be a non-negative number.",
-  }),
-  fat: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-    message: "Fat must be a non-negative number.",
-  }),
-  fiber: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-    message: "Fiber must be a non-negative number.",
-  }),
-  sugar: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-    message: "Sugar must be a non-negative number.",
-  }),
-  sodium: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-    message: "Sodium must be a non-negative number.",
+  nutrition: z.string(),
+  value: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: "Value must be a non-negative number.",
   }),
 });
 
 const mealFormSchema = z.object({
-  name: z.string().min(2, {
+  recipe_name: z.string().min(2, {
     message: "Meal name must be at least 2 characters.",
   }),
+  subname: z.string().optional(),
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
   }),
-  category: z.string({
-    required_error: "Please select a category.",
+  difficulty: z.enum(["easy", "medium", "hard"]),
+  cooking_time: z.string().min(1, {
+    message: "Cooking time is required.",
+  }),
+  total_time: z.string().min(1, {
+    message: "Total time is required.",
   }),
   price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
     message: "Price must be a positive number.",
   }),
-  prepTime: z.string().min(1, {
-    message: "Preparation time is required.",
+  status: z.enum(["active", "inactive"]).default("active"),
+  image_url: z.string().optional(),
+  category: z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string().optional(),
   }),
-  isActive: z.boolean().default(true),
   ingredients: z
     .array(ingredientSchema)
     .min(1, "At least one ingredient is required"),
-  tools: z.array(toolSchema),
-  steps: z.array(stepSchema).min(1, "At least one step is required"),
-  nutrition: nutritionSchema,
+  cooking_tools: z.array(toolSchema),
+  cooking_steps: z.array(stepSchema).min(1, "At least one step is required"),
+  nutritions: z.array(nutritionSchema),
+  tags: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    )
+    .optional(),
 });
 
 type MealFormValues = z.infer<typeof mealFormSchema>;
@@ -116,36 +116,45 @@ interface MealFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: {
-    id?: string;
-    name: string;
-    description?: string;
-    category: string;
+    recipe_id: string;
+    recipe_name: string;
+    subname?: string;
+    description: string;
+    difficulty: "easy" | "medium" | "hard";
+    cooking_time: string;
+    total_time: string;
     price: string;
-    prepTime: string;
-    status: string;
-    image?: string;
-    ingredients?: {
+    status: "active" | "inactive";
+    image_url?: string;
+    category: {
+      id: string;
       name: string;
+      description?: string;
+    };
+    ingredients: {
+      name: string;
+      description?: string;
       quantity: string;
       unit?: string;
       isShipped: boolean;
     }[];
-    tools?: {
+    cooking_tools: {
+      name: string;
+      description?: string;
+    }[];
+    cooking_steps: {
+      step_number: number;
+      instruction: string;
+      image_url?: string;
+    }[];
+    nutritions: {
+      nutrition: string;
+      value: string;
+    }[];
+    tags?: {
+      id: string;
       name: string;
     }[];
-    steps?: {
-      description: string;
-      imageUrl?: string;
-    }[];
-    nutrition?: {
-      calories: string;
-      protein: string;
-      carbs: string;
-      fat: string;
-      fiber: string;
-      sugar: string;
-      sodium: string;
-    };
   } | null;
   onSubmit: (values: MealFormValues) => void;
 }
@@ -158,7 +167,7 @@ export function MealForm({
 }: MealFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    initialData?.image || null
+    initialData?.image_url || null
   );
   const [activeTab, setActiveTab] = useState("basic");
   const [stepImagePreviews, setStepImagePreviews] = useState<
@@ -168,32 +177,50 @@ export function MealForm({
   const isEditing = !!initialData;
 
   const defaultValues: Partial<MealFormValues> = {
-    name: initialData?.name || "",
+    recipe_name: initialData?.recipe_name || "",
+    subname: initialData?.subname || "",
     description: initialData?.description || "",
-    category: initialData?.category || "",
-    price: initialData?.price?.replace("$", "") || "",
-    prepTime: initialData?.prepTime || "",
-    isActive: initialData?.status === "Active",
-    ingredients: initialData?.ingredients || [
-      { name: "", quantity: "", unit: "", isShipped: true },
+    difficulty:
+      (initialData?.difficulty as "easy" | "medium" | "hard") || "easy",
+    cooking_time: initialData?.cooking_time || "",
+    total_time: initialData?.total_time || "",
+    price: initialData?.price || "",
+    status: initialData?.status || "active",
+    image_url: initialData?.image_url || "",
+    category: initialData?.category || { id: "", name: "" },
+    ingredients: initialData?.ingredients?.map((ingredient) => ({
+      ...ingredient,
+      isShipped: ingredient.isShipped ?? false,
+    })) || [{ name: "", quantity: "", unit: "", isShipped: false }],
+    cooking_tools: initialData?.cooking_tools || [{ name: "" }],
+    cooking_steps: initialData?.cooking_steps || [
+      { step_number: 1, instruction: "" },
     ],
-    tools: initialData?.tools || [{ name: "" }],
-    steps: initialData?.steps || [{ description: "", imageUrl: "" }],
-    nutrition: initialData?.nutrition || {
-      calories: "",
-      protein: "",
-      carbs: "",
-      fat: "",
-      fiber: "",
-      sugar: "",
-      sodium: "",
-    },
+    nutritions: initialData?.nutritions || [
+      { nutrition: "calories", value: "" },
+      { nutrition: "protein", value: "" },
+      { nutrition: "carbs", value: "" },
+      { nutrition: "fat", value: "" },
+      { nutrition: "fiber", value: "" },
+      { nutrition: "sugar", value: "" },
+      { nutrition: "sodium", value: "" },
+    ],
+    tags: initialData?.tags || [],
   };
 
   const form = useForm<MealFormValues>({
     resolver: zodResolver(mealFormSchema) as Resolver<MealFormValues>,
     defaultValues,
   });
+
+  // Reset form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      form.reset(defaultValues);
+      setImagePreview(initialData.image_url || null);
+      setStepImagePreviews({});
+    }
+  }, [initialData]);
 
   const {
     fields: ingredientFields,
@@ -210,7 +237,7 @@ export function MealForm({
     remove: removeTool,
   } = useFieldArray({
     control: form.control,
-    name: "tools",
+    name: "cooking_tools",
   });
 
   const {
@@ -219,7 +246,7 @@ export function MealForm({
     remove: removeStep,
   } = useFieldArray({
     control: form.control,
-    name: "steps",
+    name: "cooking_steps",
   });
 
   const handleSubmit = async (values: MealFormValues) => {
@@ -260,9 +287,9 @@ export function MealForm({
           [index]: reader.result as string,
         }));
         // Update the form value
-        const steps = form.getValues("steps");
-        steps[index].imageUrl = reader.result as string;
-        form.setValue("steps", steps);
+        const steps = form.getValues("cooking_steps");
+        steps[index].image_url = reader.result as string;
+        form.setValue("cooking_steps", steps);
       };
       reader.readAsDataURL(file);
     }
@@ -341,7 +368,7 @@ export function MealForm({
 
                   <FormField
                     control={form.control as FormControl}
-                    name="name"
+                    name="recipe_name"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Meal Name</FormLabel>
@@ -358,7 +385,7 @@ export function MealForm({
 
                   <FormField
                     control={form.control as FormControl}
-                    name="category"
+                    name="category.name"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category</FormLabel>
@@ -412,6 +439,34 @@ export function MealForm({
 
                   <FormField
                     control={form.control as FormControl}
+                    name="cooking_time"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cooking Time</FormLabel>
+                        <FormControl>
+                          <Input placeholder="30 min" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control as FormControl}
+                    name="total_time"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Total Time</FormLabel>
+                        <FormControl>
+                          <Input placeholder="30 min" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control as FormControl}
                     name="price"
                     render={({ field }) => (
                       <FormItem>
@@ -432,21 +487,7 @@ export function MealForm({
 
                   <FormField
                     control={form.control as FormControl}
-                    name="prepTime"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Preparation Time</FormLabel>
-                        <FormControl>
-                          <Input placeholder="30 min" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control as FormControl}
-                    name="isActive"
+                    name="status"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm md:col-span-2">
                         <div className="space-y-0.5">
@@ -457,9 +498,41 @@ export function MealForm({
                         </div>
                         <FormControl>
                           <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
+                            checked={field.value === "active"}
+                            onCheckedChange={(checked) =>
+                              field.onChange(checked ? "active" : "inactive")
+                            }
                           />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control as FormControl}
+                    name="difficulty"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm md:col-span-2">
+                        <div className="space-y-0.5">
+                          <FormLabel>Difficulty</FormLabel>
+                          <FormDescription>
+                            How difficult is this meal to prepare?
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select difficulty" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="easy">Easy</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="hard">Hard</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                       </FormItem>
                     )}
@@ -481,7 +554,7 @@ export function MealForm({
                           name: "",
                           quantity: "",
                           unit: "",
-                          isShipped: true,
+                          isShipped: false,
                         })
                       }
                       className="flex items-center gap-1"
@@ -555,7 +628,7 @@ export function MealForm({
                               render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm md:col-span-4">
                                   <div className="space-y-0.5">
-                                    <FormLabel>Shipped with Meal</FormLabel>
+                                    <FormLabel>Shipped with Order</FormLabel>
                                     <FormDescription>
                                       Is this ingredient included in the meal
                                       kit package?
@@ -599,7 +672,7 @@ export function MealForm({
                       <div key={field.id} className="flex items-center gap-2">
                         <FormField
                           control={form.control as FormControl}
-                          name={`tools.${index}.name`}
+                          name={`cooking_tools.${index}.name`}
                           render={({ field }) => (
                             <FormItem className="flex-1">
                               <FormControl>
@@ -634,7 +707,7 @@ export function MealForm({
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        appendStep({ description: "", imageUrl: "" })
+                        appendStep({ step_number: 1, instruction: "" })
                       }
                       className="flex items-center gap-1"
                     >
@@ -662,7 +735,7 @@ export function MealForm({
 
                             <FormField
                               control={form.control as FormControl}
-                              name={`steps.${index}.description`}
+                              name={`cooking_steps.${index}.instruction`}
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel>Step Description</FormLabel>
@@ -681,12 +754,12 @@ export function MealForm({
                             <div className="space-y-2">
                               <FormLabel>Step Image (Optional)</FormLabel>
                               <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg">
-                                {stepImagePreviews[index] || field.imageUrl ? (
+                                {stepImagePreviews[index] || field.image_url ? (
                                   <div className="relative w-full h-48">
                                     <img
                                       src={
                                         stepImagePreviews[index] ||
-                                        field.imageUrl ||
+                                        field.image_url ||
                                         "/placeholder.svg"
                                       }
                                       alt={`Step ${index + 1}`}
@@ -704,9 +777,10 @@ export function MealForm({
                                           return newPreviews;
                                         });
                                         // Clear the form value
-                                        const steps = form.getValues("steps");
-                                        steps[index].imageUrl = "";
-                                        form.setValue("steps", steps);
+                                        const steps =
+                                          form.getValues("cooking_steps");
+                                        steps[index].image_url = "";
+                                        form.setValue("cooking_steps", steps);
                                       }}
                                     >
                                       Change Image
@@ -749,138 +823,30 @@ export function MealForm({
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.calories"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Calories (kcal)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="450"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.protein"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Protein (g)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="30"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.carbs"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Carbohydrates (g)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="25"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.fat"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Fat (g)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="15"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.fiber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Fiber (g)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="3"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.sugar"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sugar (g)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="5"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control as FormControl}
-                      name="nutrition.sodium"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sodium (mg)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="0"
-                              placeholder="500"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {form.getValues("nutritions").map((nutrition, index) => (
+                      <FormField
+                        key={index}
+                        control={form.control as FormControl}
+                        name={`nutritions.${index}.nutrition`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              {field.value.charAt(0).toUpperCase() +
+                                field.value.slice(1)}
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="0"
+                                placeholder="0"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ))}
                   </div>
                 </div>
               </TabsContent>
