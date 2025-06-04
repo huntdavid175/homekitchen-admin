@@ -531,11 +531,11 @@ export function AdminDashboard({
                         </CardDescription>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="rounded-lg bg-white"
-                        >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-lg bg-white"
+                      >
                           Monthly
                         </Button>
                         <Button
@@ -544,7 +544,7 @@ export function AdminDashboard({
                           className="rounded-lg"
                         >
                           Yearly
-                        </Button>
+                      </Button>
                       </div>
                     </div>
                   </CardHeader>

@@ -1,8 +1,7 @@
 import { MealManagement } from "@/components/admin/MealManagement";
 import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 
-async function getMeals() {
+async function getMeals(page: string) {
   const supabase = await createClient();
 
   const {
@@ -15,7 +14,7 @@ async function getMeals() {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/recipes`,
+      `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/recipes?page=${page}&limit=10`,
       {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
@@ -35,9 +34,27 @@ async function getMeals() {
   }
 }
 
-export default async function MealsPage() {
-  const meals = await getMeals();
-  console.dir(meals, { depth: null });
+export default async function MealsPage({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
+  const page = searchParams.page || "1";
+  const meals = await getMeals(page);
+  //   console.dir(meals, { depth: null });
+  console.log(meals);
 
-  return <MealManagement meals={meals.data} />;
+  return (
+    <MealManagement
+      meals={meals.data}
+      pagination={{
+        currentPage: meals.pagination.currentPage,
+        totalPages: meals.pagination.totalPages,
+        totalItems: meals.pagination.totalItems,
+        itemsPerPage: meals.pagination.itemsPerPage,
+        hasNextPage: meals.pagination.hasNextPage,
+        hasPreviousPage: meals.pagination.hasPreviousPage,
+      }}
+    />
+  );
 }

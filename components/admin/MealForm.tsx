@@ -40,13 +40,14 @@ import { Loader2, Plus, Trash2, Upload, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Resolver, SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
 
 const ingredientSchema = z.object({
   name: z.string().min(1, "Ingredient name is required"),
   description: z.string().optional(),
   quantity: z.string().min(1, "Quantity is required"),
   unit: z.string().optional(),
-  isShipped: z.boolean().default(false),
+  is_shipped: z.boolean().default(false),
 });
 
 const toolSchema = z.object({
@@ -57,7 +58,7 @@ const toolSchema = z.object({
 const stepSchema = z.object({
   step_number: z.number(),
   instruction: z.string().min(1, "Step instruction is required"),
-  image_url: z.string().optional(),
+  image_url: z.string().nullable().optional(),
 });
 
 const nutritionSchema = z.object({
@@ -86,7 +87,7 @@ const mealFormSchema = z.object({
     message: "Price must be a positive number.",
   }),
   status: z.enum(["active", "inactive"]).default("active"),
-  image_url: z.string().optional(),
+  image_url: z.string().nullable().optional(),
   category: z.object({
     id: z.string(),
     name: z.string(),
@@ -136,7 +137,7 @@ interface MealFormProps {
       description?: string;
       quantity: string;
       unit?: string;
-      isShipped: boolean;
+      is_shipped: boolean;
     }[];
     cooking_tools: {
       name: string;
@@ -186,12 +187,12 @@ export function MealForm({
     total_time: initialData?.total_time || "",
     price: initialData?.price || "",
     status: initialData?.status || "active",
-    image_url: initialData?.image_url || "",
+    image_url: initialData?.image_url || null,
     category: initialData?.category || { id: "", name: "" },
     ingredients: initialData?.ingredients?.map((ingredient) => ({
       ...ingredient,
-      isShipped: ingredient.isShipped ?? false,
-    })) || [{ name: "", quantity: "", unit: "", isShipped: false }],
+      is_shipped: ingredient.is_shipped ?? false,
+    })) || [{ name: "", quantity: "", unit: "", is_shipped: false }],
     cooking_tools: initialData?.cooking_tools || [{ name: "" }],
     cooking_steps: initialData?.cooking_steps || [
       { step_number: 1, instruction: "" },
@@ -211,7 +212,21 @@ export function MealForm({
   const form = useForm<MealFormValues>({
     resolver: zodResolver(mealFormSchema) as Resolver<MealFormValues>,
     defaultValues,
+    mode: "onChange",
   });
+
+  // Add form state logging
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      console.log("Form values changed:", value);
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  // Add form error logging
+  useEffect(() => {
+    console.log("Form errors:", form.formState.errors);
+  }, [form.formState.errors]);
 
   // Reset form when initialData changes
   useEffect(() => {
@@ -250,14 +265,25 @@ export function MealForm({
   });
 
   const handleSubmit = async (values: MealFormValues) => {
+    console.log("Form submitted with values:", values);
     setIsSubmitting(true);
     try {
-      // In a real app, you would upload the image here if it changed
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      onSubmit(values);
-      onOpenChange(false);
+      // Transform the form data to ensure image_urls are properly handled
+      const transformedValues = {
+        ...values,
+        image_url: values.image_url || null,
+        cooking_steps: values.cooking_steps.map((step) => ({
+          ...step,
+          image_url: step.image_url || null,
+        })),
+      };
+
+      console.log("About to call onSubmit with values:", transformedValues);
+      await onSubmit(transformedValues);
+      console.log("onSubmit called successfully");
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Failed to save meal. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -282,13 +308,14 @@ export function MealForm({
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
+        const imageUrl = reader.result as string;
         setStepImagePreviews((prev) => ({
           ...prev,
-          [index]: reader.result as string,
+          [index]: imageUrl,
         }));
         // Update the form value
         const steps = form.getValues("cooking_steps");
-        steps[index].image_url = reader.result as string;
+        steps[index].image_url = imageUrl;
         form.setValue("cooking_steps", steps);
       };
       reader.readAsDataURL(file);
@@ -309,9 +336,10 @@ export function MealForm({
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(
-              handleSubmit as SubmitHandler<MealFormValues>
-            )}
+            onSubmit={form.handleSubmit((values) => {
+              console.log("Form onSubmit event triggered");
+              handleSubmit(values);
+            })}
             className="space-y-6"
           >
             <Tabs
@@ -554,7 +582,7 @@ export function MealForm({
                           name: "",
                           quantity: "",
                           unit: "",
-                          isShipped: false,
+                          is_shipped: false,
                         })
                       }
                       className="flex items-center gap-1"
@@ -624,7 +652,7 @@ export function MealForm({
 
                             <FormField
                               control={form.control as FormControl}
-                              name={`ingredients.${index}.isShipped`}
+                              name={`ingredients.${index}.is_shipped`}
                               render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm md:col-span-4">
                                   <div className="space-y-0.5">
@@ -909,10 +937,16 @@ export function MealForm({
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {isEditing ? "Updating..." : "Adding..."}
+                    </>
+                  ) : isEditing ? (
+                    "Update Meal"
+                  ) : (
+                    "Add Meal"
                   )}
-                  {isEditing ? "Update Meal" : "Add Meal"}
                 </Button>
               </div>
             </DialogFooter>

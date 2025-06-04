@@ -44,138 +44,32 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { MealForm } from "@/components/admin/MealForm";
+import { updateRecipe } from "@/app/actions/recipes";
+import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export function MealManagement({ meals }: { meals: any[] }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export function MealManagement({
+  meals,
+  pagination,
+}: {
+  meals: any[];
+  pagination: PaginationProps;
+}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddMealDialog, setShowAddMealDialog] = useState(false);
   const [showEditMealDialog, setShowEditMealDialog] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<any>(null);
-
-  // Sample meal data
-  //   const meals = [
-  //     {
-  //       id: "MEAL-001",
-  //       name: "Garlic Butter Salmon",
-  //       category: "High Protein",
-  //       price: "$14.99",
-  //       calories: 450,
-  //       prepTime: "30 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-002",
-  //       name: "Vegetable Stir Fry",
-  //       category: "Vegetarian",
-  //       price: "$12.99",
-  //       calories: 320,
-  //       prepTime: "25 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-003",
-  //       name: "Chicken Fajita Bowl",
-  //       category: "High Protein",
-  //       price: "$13.99",
-  //       calories: 520,
-  //       prepTime: "35 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-004",
-  //       name: "Mushroom Risotto",
-  //       category: "Vegetarian",
-  //       price: "$11.99",
-  //       calories: 380,
-  //       prepTime: "40 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-005",
-  //       name: "Beef Tacos",
-  //       category: "Family Friendly",
-  //       price: "$15.99",
-  //       calories: 550,
-  //       prepTime: "20 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-006",
-  //       name: "Pasta Primavera",
-  //       category: "Vegetarian",
-  //       price: "$12.99",
-  //       calories: 420,
-  //       prepTime: "25 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-007",
-  //       name: "Teriyaki Chicken",
-  //       category: "High Protein",
-  //       price: "$14.99",
-  //       calories: 480,
-  //       prepTime: "30 min",
-  //       status: "Inactive",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-008",
-  //       name: "Mediterranean Salad",
-  //       category: "Low Calorie",
-  //       price: "$10.99",
-  //       calories: 280,
-  //       prepTime: "15 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-009",
-  //       name: "Shrimp Scampi",
-  //       category: "Seafood",
-  //       price: "$16.99",
-  //       calories: 420,
-  //       prepTime: "25 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-010",
-  //       name: "Quinoa Bowl",
-  //       category: "Vegetarian",
-  //       price: "$13.99",
-  //       calories: 350,
-  //       prepTime: "20 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-011",
-  //       name: "BBQ Pulled Pork",
-  //       category: "Family Friendly",
-  //       price: "$15.99",
-  //       calories: 580,
-  //       prepTime: "45 min",
-  //       status: "Inactive",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //     {
-  //       id: "MEAL-012",
-  //       name: "Spinach and Feta Stuffed Chicken",
-  //       category: "High Protein",
-  //       price: "$14.99",
-  //       calories: 450,
-  //       prepTime: "35 min",
-  //       status: "Active",
-  //       image: "/placeholder.svg?height=60&width=60",
-  //     },
-  //   ];
 
   // Filter meals based on search term
   const filteredMeals = meals.filter(
@@ -185,17 +79,11 @@ export function MealManagement({ meals }: { meals: any[] }) {
       meal.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredMeals.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredMeals.length / itemsPerPage);
-
-  // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  const nextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`/meals?${params.toString()}`);
+  };
 
   // Add ripple effect to buttons
   const addRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -228,6 +116,7 @@ export function MealManagement({ meals }: { meals: any[] }) {
   };
 
   const handleEditMeal = (meal: any) => {
+    console.log("Editing meal:", meal);
     // First close the dialog if it's open
     setShowEditMealDialog(false);
     // Then set the new meal data
@@ -255,10 +144,85 @@ export function MealManagement({ meals }: { meals: any[] }) {
     }, 100);
   };
 
-  const handleUpdateMeal = (values: any) => {
-    console.log("Updating meal:", values);
-    // In a real app, you would make an API call here
-    // and then refresh the meals list
+  const handleUpdateMeal = async (values: any) => {
+    console.log("handleUpdateMeal called with values:", values);
+    console.log("Selected meal:", selectedMeal);
+
+    if (!selectedMeal?.recipe_id) {
+      console.error("No recipe_id found in selectedMeal");
+      toast.error("Failed to update meal: Missing recipe ID");
+      return;
+    }
+
+    try {
+      // Transform the form data to match the API's expected format
+      const updateData = {
+        name: values.recipe_name,
+        subname: values.subname,
+        description: values.description,
+        difficulty: values.difficulty,
+        cooking_time: parseInt(values.cooking_time),
+        total_time: parseInt(values.total_time),
+        image_url: values.image_url || null,
+        category_id: values.category?.id || selectedMeal.category.id,
+        ingredients: values.ingredients.map((ing: any) => {
+          // Find the matching ingredient from the original meal data
+          const originalIngredient = selectedMeal.ingredients.find(
+            (origIng: any) => origIng.name === ing.name
+          );
+
+          if (!originalIngredient?.id) {
+            throw new Error(`Ingredient ID not found for: ${ing.name}`);
+          }
+
+          return {
+            ingredient_id: originalIngredient.id,
+            quantity: parseFloat(ing.quantity),
+            unit: ing.unit,
+            is_shipped: ing.is_shipped,
+          };
+        }),
+        cooking_steps: values.cooking_steps.map((step: any) => ({
+          step_number: step.step_number,
+          instruction: step.instruction,
+          image_url: step.image_url || null,
+        })),
+        tags:
+          values.tags?.map((tag: any) => ({
+            name: tag.name,
+          })) || [],
+        cooking_tools: values.cooking_tools.map((tool: any) => ({
+          name: tool.name,
+          description: tool.description,
+        })),
+        nutritions: values.nutritions.map((nutrition: any) => ({
+          nutrition: nutrition.nutrition,
+          value: nutrition.value,
+        })),
+      };
+
+      // Validate category_id before sending
+      if (!updateData.category_id) {
+        throw new Error("Category ID is required");
+      }
+
+      console.log("Sending update data:", updateData);
+      await updateRecipe(selectedMeal.recipe_id, updateData);
+      console.log("Update successful");
+
+      // Show success message
+      toast.success("Meal updated successfully");
+
+      // Close the dialog
+      setShowEditMealDialog(false);
+    } catch (error) {
+      console.error("Error updating meal:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to update meal. Please try again."
+      );
+    }
   };
 
   return (
@@ -310,7 +274,7 @@ export function MealManagement({ meals }: { meals: any[] }) {
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
-                    setCurrentPage(1); // Reset to first page on search
+                    handlePageChange(1); // Reset to first page on search
                   }}
                 />
               </div>
@@ -410,7 +374,7 @@ export function MealManagement({ meals }: { meals: any[] }) {
                           className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
                           style={{
                             animationDelay: `${
-                              0.1 + (index % itemsPerPage) * 0.1
+                              0.1 + (index % pagination.itemsPerPage) * 0.1
                             }s`,
                           }}
                         >
@@ -548,13 +512,19 @@ export function MealManagement({ meals }: { meals: any[] }) {
                 <div className="flex items-center justify-between px-4 py-4 border-t border-gray-100">
                   <div className="text-sm text-muted-foreground">
                     Showing{" "}
-                    <span className="font-medium">{indexOfFirstItem + 1}</span>{" "}
+                    <span className="font-medium">
+                      {(pagination.currentPage - 1) * pagination.itemsPerPage +
+                        1}
+                    </span>{" "}
                     to{" "}
                     <span className="font-medium">
-                      {Math.min(indexOfLastItem, filteredMeals.length)}
+                      {Math.min(
+                        pagination.currentPage * pagination.itemsPerPage,
+                        pagination.totalItems
+                      )}
                     </span>{" "}
                     of{" "}
-                    <span className="font-medium">{filteredMeals.length}</span>{" "}
+                    <span className="font-medium">{pagination.totalItems}</span>{" "}
                     meals
                   </div>
                   <div className="flex items-center space-x-2">
@@ -564,40 +534,43 @@ export function MealManagement({ meals }: { meals: any[] }) {
                       className="rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
                       onClick={(e) => {
                         addRipple(e);
-                        prevPage();
+                        handlePageChange(pagination.currentPage - 1);
                       }}
-                      disabled={currentPage === 1}
+                      disabled={!pagination.hasPreviousPage}
                     >
                       <ChevronLeft className="h-4 w-4" />
                       <span className="sr-only">Previous page</span>
                     </Button>
                     <div className="hidden sm:flex items-center space-x-1">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (pageNumber) => (
-                          <Button
-                            key={`page-${pageNumber}`}
-                            variant={
-                              currentPage === pageNumber ? "default" : "outline"
-                            }
-                            size="sm"
-                            className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
-                              currentPage === pageNumber
-                                ? "bg-emerald-600 hover:bg-emerald-700"
-                                : ""
-                            }`}
-                            onClick={(e) => {
-                              addRipple(e);
-                              paginate(pageNumber);
-                            }}
-                          >
-                            {pageNumber}
-                          </Button>
-                        )
-                      )}
+                      {Array.from(
+                        { length: pagination.totalPages },
+                        (_, i) => i + 1
+                      ).map((pageNumber) => (
+                        <Button
+                          key={`page-${pageNumber}`}
+                          variant={
+                            pagination.currentPage === pageNumber
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className={`rounded-xl relative overflow-hidden transition-all hover:-translate-y-1 ${
+                            pagination.currentPage === pageNumber
+                              ? "bg-emerald-600 hover:bg-emerald-700"
+                              : ""
+                          }`}
+                          onClick={(e) => {
+                            addRipple(e);
+                            handlePageChange(pageNumber);
+                          }}
+                        >
+                          {pageNumber}
+                        </Button>
+                      ))}
                     </div>
                     <div className="sm:hidden">
                       <span className="text-sm font-medium">
-                        Page {currentPage} of {totalPages}
+                        Page {pagination.currentPage} of {pagination.totalPages}
                       </span>
                     </div>
                     <Button
@@ -606,9 +579,9 @@ export function MealManagement({ meals }: { meals: any[] }) {
                       className="rounded-xl relative overflow-hidden transition-all hover:-translate-y-1"
                       onClick={(e) => {
                         addRipple(e);
-                        nextPage();
+                        handlePageChange(pagination.currentPage + 1);
                       }}
-                      disabled={currentPage === totalPages}
+                      disabled={!pagination.hasNextPage}
                     >
                       <ChevronRight className="h-4 w-4" />
                       <span className="sr-only">Next page</span>
