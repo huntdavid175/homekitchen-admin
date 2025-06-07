@@ -44,7 +44,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { MealForm } from "@/components/admin/MealForm";
-import { updateRecipe } from "@/app/actions/recipes";
+import { updateRecipe, createRecipe } from "@/app/actions/recipes";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -109,10 +109,69 @@ export function MealManagement({
     }, 600);
   };
 
-  const handleAddMeal = (values: any) => {
+  const handleAddMeal = async (values: any) => {
     console.log("Adding meal:", values);
-    // In a real app, you would make an API call here
-    // and then refresh the meals list
+    try {
+      // Transform the form data to match the API's expected format
+      const createData = {
+        name: values.recipe_name,
+        subname: values.subname,
+        description: values.description,
+        difficulty: values.difficulty,
+        cooking_time: parseInt(values.cooking_time),
+        total_time: parseInt(values.total_time),
+        image_url: values.image_url || null,
+        category_id: values.category.id,
+        ingredients: values.ingredients.map((ing: any) => ({
+          ingredient_id: ing.id || "", // You might need to handle this differently
+          quantity: parseFloat(ing.quantity),
+          unit: ing.unit,
+          is_shipped: ing.is_shipped,
+        })),
+        cooking_steps: values.cooking_steps.map((step: any) => ({
+          step_number: step.step_number,
+          instruction: step.instruction,
+          image_url: step.image_url || null,
+        })),
+        tags:
+          values.tags?.map((tag: any) => ({
+            name: tag.name,
+          })) || [],
+        cooking_tools: values.cooking_tools.map((tool: any) => ({
+          name: tool.name,
+          description: tool.description,
+        })),
+        nutritions: values.nutritions.map((nutrition: any) => ({
+          nutrition: nutrition.nutrition,
+          value: nutrition.value,
+        })),
+      };
+
+      // Validate category_id before sending
+      if (!createData.category_id) {
+        throw new Error("Category ID is required");
+      }
+
+      console.log("Sending create data:", createData);
+      await createRecipe(createData);
+      console.log("Create successful");
+
+      // Show success message
+      toast.success("Meal added successfully");
+
+      // Close the dialog
+      setShowAddMealDialog(false);
+
+      // Reset to first page
+      handlePageChange(1);
+    } catch (error) {
+      console.error("Error adding meal:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to add meal. Please try again."
+      );
+    }
   };
 
   const handleEditMeal = (meal: any) => {
@@ -240,6 +299,7 @@ export function MealManagement({
               variant="outline"
               size="sm"
               className="flex items-center gap-2 rounded-xl hover:bg-emerald-50"
+              onClick={() => setShowAddMealDialog(true)}
             >
               <Plus className="h-4 w-4 text-emerald-600" />
               Add Meal

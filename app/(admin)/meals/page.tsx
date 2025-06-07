@@ -42,7 +42,7 @@ export default async function MealsPage({
   const page = searchParams.page || "1";
   const meals = await getMeals(page);
   //   console.dir(meals, { depth: null });
-  console.log(meals);
+  // console.log(meals);
 
   return (
     <MealManagement

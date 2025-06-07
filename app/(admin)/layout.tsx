@@ -16,6 +16,7 @@ import {
   Settings,
   ShoppingBag,
   Users,
+  Tag,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,12 @@ export default function AdminLayout({
       icon: ShoppingBag,
       href: "/meals",
       active: pathname === "/meals",
+    },
+    {
+      label: "Categories",
+      icon: Tag,
+      href: "categories",
+      active: pathname === "/admin/categories",
     },
     // {
     //   label: "Subscriptions",
