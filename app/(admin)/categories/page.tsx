@@ -1,6 +1,11 @@
 import { CategoryManagement } from "@/components/admin/CategoryManagement";
+import { getCategories } from "@/app/actions/categories";
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const categories = await getCategories();
+
+  console.log(categories);
+
   return (
     <div className="space-y-6">
       <div>
@@ -9,7 +14,11 @@ export default function CategoriesPage() {
           Manage meal categories and organize your menu items.
         </p>
       </div>
-      <CategoryManagement />
+      <CategoryManagement
+        categories={categories.data}
+        totalCategories={categories.total_categories}
+        totalMeals={categories.total_meals}
+      />
     </div>
   );
 }

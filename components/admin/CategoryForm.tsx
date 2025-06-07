@@ -23,10 +23,10 @@ interface Category {
   name: string;
   description: string;
   color: string;
-  mealCount: number;
+  recipe_count: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface CategoryFormProps {
@@ -65,7 +65,7 @@ export function CategoryForm({
     name: "",
     description: "",
     color: "#FF6B6B",
-    mealCount: 0,
+    recipe_count: 0,
     isActive: true,
   });
 
@@ -75,7 +75,7 @@ export function CategoryForm({
         name: category.name,
         description: category.description,
         color: category.color,
-        mealCount: category.mealCount,
+        recipe_count: parseInt(category.recipe_count),
         isActive: category.isActive,
       });
     } else {
@@ -83,7 +83,7 @@ export function CategoryForm({
         name: "",
         description: "",
         color: "#FF6B6B",
-        mealCount: 0,
+        recipe_count: 0,
         isActive: true,
       });
     }

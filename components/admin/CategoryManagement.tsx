@@ -38,77 +38,86 @@ interface Category {
   name: string;
   description: string;
   color: string;
-  mealCount: number;
+  recipe_count: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
-const initialCategories: Category[] = [
-  {
-    id: "1",
-    name: "Breakfast",
-    description: "Morning meals to start your day right",
-    color: "#FF6B6B",
-    mealCount: 12,
-    isActive: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-20",
-  },
-  {
-    id: "2",
-    name: "Lunch",
-    description: "Nutritious midday meals",
-    color: "#4ECDC4",
-    mealCount: 18,
-    isActive: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-18",
-  },
-  {
-    id: "3",
-    name: "Dinner",
-    description: "Satisfying evening meals",
-    color: "#45B7D1",
-    mealCount: 24,
-    isActive: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-22",
-  },
-  {
-    id: "4",
-    name: "Vegetarian",
-    description: "Plant-based meal options",
-    color: "#96CEB4",
-    mealCount: 15,
-    isActive: true,
-    createdAt: "2024-01-16",
-    updatedAt: "2024-01-21",
-  },
-  {
-    id: "5",
-    name: "Keto",
-    description: "Low-carb, high-fat meals",
-    color: "#FFEAA7",
-    mealCount: 8,
-    isActive: true,
-    createdAt: "2024-01-17",
-    updatedAt: "2024-01-19",
-  },
-  {
-    id: "6",
-    name: "Gluten-Free",
-    description: "Meals without gluten ingredients",
-    color: "#DDA0DD",
-    mealCount: 6,
-    isActive: false,
-    createdAt: "2024-01-18",
-    updatedAt: "2024-01-20",
-  },
-];
+// const initialCategories: Category[] = [
+//   {
+//     id: "1",
+//     name: "Breakfast",
+//     description: "Morning meals to start your day right",
+//     color: "#FF6B6B",
+//     mealCount: 12,
+//     isActive: true,
+//     createdAt: "2024-01-15",
+//     updatedAt: "2024-01-20",
+//   },
+//   {
+//     id: "2",
+//     name: "Lunch",
+//     description: "Nutritious midday meals",
+//     color: "#4ECDC4",
+//     mealCount: 18,
+//     isActive: true,
+//     createdAt: "2024-01-15",
+//     updatedAt: "2024-01-18",
+//   },
+//   {
+//     id: "3",
+//     name: "Dinner",
+//     description: "Satisfying evening meals",
+//     color: "#45B7D1",
+//     mealCount: 24,
+//     isActive: true,
+//     createdAt: "2024-01-15",
+//     updatedAt: "2024-01-22",
+//   },
+//   {
+//     id: "4",
+//     name: "Vegetarian",
+//     description: "Plant-based meal options",
+//     color: "#96CEB4",
+//     mealCount: 15,
+//     isActive: true,
+//     createdAt: "2024-01-16",
+//     updatedAt: "2024-01-21",
+//   },
+//   {
+//     id: "5",
+//     name: "Keto",
+//     description: "Low-carb, high-fat meals",
+//     color: "#FFEAA7",
+//     mealCount: 8,
+//     isActive: true,
+//     createdAt: "2024-01-17",
+//     updatedAt: "2024-01-19",
+//   },
+//   {
+//     id: "6",
+//     name: "Gluten-Free",
+//     description: "Meals without gluten ingredients",
+//     color: "#DDA0DD",
+//     mealCount: 6,
+//     isActive: false,
+//     createdAt: "2024-01-18",
+//     updatedAt: "2024-01-20",
+//   },
+// ];
 
-export function CategoryManagement() {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+interface CategoryManagementProps {
+  categories: Category[];
+  totalCategories: number;
+  totalMeals: number;
+}
+
+export function CategoryManagement({
+  categories,
+  totalCategories,
+  totalMeals,
+}: CategoryManagementProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -127,34 +136,34 @@ export function CategoryManagement() {
   );
 
   const handleAddCategory = (
-    categoryData: Omit<Category, "id" | "createdAt" | "updatedAt">
+    categoryData: Omit<Category, "id" | "created_at" | "updated_at">
   ) => {
     const newCategory: Category = {
       ...categoryData,
       id: Date.now().toString(),
-      createdAt: new Date().toISOString().split("T")[0],
-      updatedAt: new Date().toISOString().split("T")[0],
+      created_at: new Date().toISOString().split("T")[0],
+      updated_at: new Date().toISOString().split("T")[0],
     };
-    setCategories([...categories, newCategory]);
+    // setCategories([...categories, newCategory]);
     setIsFormOpen(false);
   };
 
   const handleEditCategory = (
-    categoryData: Omit<Category, "id" | "createdAt" | "updatedAt">
+    categoryData: Omit<Category, "id" | "created_at" | "updated_at">
   ) => {
     if (!selectedCategory) return;
 
     const updatedCategory: Category = {
       ...selectedCategory,
       ...categoryData,
-      updatedAt: new Date().toISOString().split("T")[0],
+      updated_at: new Date().toISOString().split("T")[0],
     };
 
-    setCategories(
-      categories.map((cat) =>
-        cat.id === selectedCategory.id ? updatedCategory : cat
-      )
-    );
+    // setCategories(
+    //   categories.map((cat) =>
+    //     cat.id === selectedCategory.id ? updatedCategory : cat
+    //   )
+    // );
     setSelectedCategory(null);
     setIsFormOpen(false);
   };
@@ -166,22 +175,22 @@ export function CategoryManagement() {
 
   const confirmDeleteCategory = () => {
     if (categoryToDelete) {
-      setCategories(categories.filter((cat) => cat.id !== categoryToDelete.id));
+      //   setCategories(categories.filter((cat) => cat.id !== categoryToDelete.id));
       setCategoryToDelete(null);
       setIsDeleteOpen(false);
     }
   };
 
-  const handleToggleStatus = (category: Category) => {
-    const updatedCategory = {
-      ...category,
-      isActive: !category.isActive,
-      updatedAt: new Date().toISOString().split("T")[0],
-    };
-    setCategories(
-      categories.map((cat) => (cat.id === category.id ? updatedCategory : cat))
-    );
-  };
+  //   const handleToggleStatus = (category: Category) => {
+  //     const updatedCategory = {
+  //       ...category,
+  //       isActive: !category.isActive,
+  //       updatedAt: new Date().toISOString().split("T")[0],
+  //     };
+  //     setCategories(
+  //       categories.map((cat) => (cat.id === category.id ? updatedCategory : cat))
+  //     );
+  //   };
 
   const handleViewDetails = (category: Category) => {
     setSelectedCategory(category);
@@ -193,9 +202,9 @@ export function CategoryManagement() {
     setIsFormOpen(true);
   };
 
-  const totalCategories = categories.length;
-  const activeCategories = categories.filter((cat) => cat.isActive).length;
-  const totalMeals = categories.reduce((sum, cat) => sum + cat.mealCount, 0);
+  //   const totalCategories = categories.length;
+  //   const activeCategories = categories.filter((cat) => cat.isActive).length;
+  //   const totalMeals = categories.reduce((sum, cat) => sum + cat.mealCount, 0);
 
   return (
     <div className="space-y-6">
@@ -213,7 +222,7 @@ export function CategoryManagement() {
               {totalCategories}
             </div>
             <p className="text-xs text-muted-foreground">
-              {activeCategories} active categories
+              {totalCategories} active categories
             </p>
           </CardContent>
         </Card>
@@ -225,12 +234,9 @@ export function CategoryManagement() {
             <Tag className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {activeCategories}
-            </div>
+            <div className="text-2xl font-bold text-green-600">{15}</div>
             <p className="text-xs text-muted-foreground">
-              {((activeCategories / totalCategories) * 100).toFixed(1)}% of
-              total
+              {((200 / totalCategories) * 100).toFixed(1)}% of total
             </p>
           </CardContent>
         </Card>
@@ -330,7 +336,7 @@ export function CategoryManagement() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary" className="rounded-full">
-                        {category.mealCount} meals
+                        {category.recipe_count} meals
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -342,7 +348,7 @@ export function CategoryManagement() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {new Date(category.updatedAt).toLocaleDateString()}
+                      {new Date(category.updated_at || "").toLocaleDateString()}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -368,7 +374,7 @@ export function CategoryManagement() {
                             Edit Category
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleToggleStatus(category)}
+                          // onClick={() => handleToggleStatus(category)}
                           >
                             <Tag className="mr-2 h-4 w-4" />
                             {category.isActive ? "Deactivate" : "Activate"}

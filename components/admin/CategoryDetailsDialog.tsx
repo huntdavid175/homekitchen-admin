@@ -17,10 +17,10 @@ interface Category {
   name: string;
   description: string;
   color: string;
-  mealCount: number;
+  recipe_count: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface CategoryDetailsDialogProps {
@@ -121,7 +121,7 @@ export function CategoryDetailsDialog({
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <span className="text-sm font-medium">Total Meals</span>
                   <Badge variant="secondary" className="rounded-full">
-                    {category.mealCount} meals
+                    {category.recipe_count} meals
                   </Badge>
                 </div>
               </div>
@@ -142,7 +142,7 @@ export function CategoryDetailsDialog({
                   Created
                 </span>
                 <span className="text-sm">
-                  {new Date(category.createdAt).toLocaleDateString("en-US", {
+                  {new Date(category.created_at).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -155,7 +155,7 @@ export function CategoryDetailsDialog({
                   Last Updated
                 </span>
                 <span className="text-sm">
-                  {new Date(category.updatedAt).toLocaleDateString("en-US", {
+                  {new Date(category.updated_at).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",

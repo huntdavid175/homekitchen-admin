@@ -19,10 +19,10 @@ interface Category {
   name: string;
   description: string;
   color: string;
-  mealCount: number;
+  recipe_count: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface DeleteCategoryDialogProps {
@@ -77,7 +77,7 @@ export function DeleteCategoryDialog({
                 />
                 <span className="font-medium">{category.name}</span>
                 <Badge variant="secondary" className="rounded-full">
-                  {category.mealCount} meals
+                  {category.recipe_count} meals
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -85,11 +85,11 @@ export function DeleteCategoryDialog({
               </p>
             </div>
 
-            {category.mealCount > 0 && (
+            {parseInt(category.recipe_count) > 0 && (
               <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <p className="text-sm text-amber-800">
                   <strong>Warning:</strong> This category contains{" "}
-                  {category.mealCount} meal(s). Deleting this category will
+                  {category.recipe_count} meal(s). Deleting this category will
                   remove it from all associated meals.
                 </p>
               </div>
