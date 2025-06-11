@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, AlertTriangle } from "lucide-react";
+import { deleteCategory } from "@/app/actions/categories";
+import { toast } from "sonner";
 
 interface Category {
   id: string;
@@ -20,7 +22,7 @@ interface Category {
   description: string;
   color: string;
   recipe_count: string;
-  isActive: boolean;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -41,13 +43,19 @@ export function DeleteCategoryDialog({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirm = async () => {
+    if (!category) return;
+
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await deleteCategory(category.id);
+      toast.success("Category deleted successfully");
       onConfirm();
+      onOpenChange(false);
     } catch (error) {
       console.error("Error deleting category:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete category"
+      );
     } finally {
       setIsLoading(false);
     }

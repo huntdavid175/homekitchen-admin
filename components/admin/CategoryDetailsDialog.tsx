@@ -18,7 +18,7 @@ interface Category {
   description: string;
   color: string;
   recipe_count: string;
-  isActive: boolean;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -85,10 +85,10 @@ export function CategoryDetailsDialog({
                   </label>
                   <div className="mt-1">
                     <Badge
-                      variant={category.isActive ? "default" : "secondary"}
+                      variant={category.is_active ? "default" : "secondary"}
                       className="rounded-full"
                     >
-                      {category.isActive ? "Active" : "Inactive"}
+                      {category.is_active ? "Active" : "Inactive"}
                     </Badge>
                   </div>
                 </div>

@@ -18,6 +18,7 @@ export default async function CategoriesPage() {
         categories={categories.data}
         totalCategories={categories.total_categories}
         totalMeals={categories.total_meals}
+        activeCategories={categories.active_categories}
       />
     </div>
   );

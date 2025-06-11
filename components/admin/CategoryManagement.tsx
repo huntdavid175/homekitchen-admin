@@ -32,14 +32,15 @@ import { CategoryForm } from "./CategoryForm";
 import { CategoryDetailsDialog } from "./CategoryDetailsDialog";
 import { DeleteCategoryDialog } from "./DeleteCategoryDialog";
 import { EmptyTableState } from "./EmptyStates";
+import { createCategory } from "@/app/actions/categories";
 
 interface Category {
   id: string;
   name: string;
   description: string;
   color: string;
-  recipe_count: string;
-  isActive: boolean;
+  recipe_count?: string;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -111,12 +112,14 @@ interface CategoryManagementProps {
   categories: Category[];
   totalCategories: number;
   totalMeals: number;
+  activeCategories: number;
 }
 
 export function CategoryManagement({
   categories,
   totalCategories,
   totalMeals,
+  activeCategories,
 }: CategoryManagementProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -135,17 +138,19 @@ export function CategoryManagement({
       category.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddCategory = (
+  const handleAddCategory = async (
     categoryData: Omit<Category, "id" | "created_at" | "updated_at">
   ) => {
-    const newCategory: Category = {
-      ...categoryData,
-      id: Date.now().toString(),
-      created_at: new Date().toISOString().split("T")[0],
-      updated_at: new Date().toISOString().split("T")[0],
-    };
-    // setCategories([...categories, newCategory]);
-    setIsFormOpen(false);
+    try {
+      const response = await createCategory(categoryData);
+      if (response) {
+        // Refresh the categories list
+        // You might want to add a refresh function here
+        setIsFormOpen(false);
+      }
+    } catch (error) {
+      console.error("Error adding category:", error);
+    }
   };
 
   const handleEditCategory = (
@@ -234,9 +239,12 @@ export function CategoryManagement({
             <Tag className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{15}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {activeCategories}
+            </div>
             <p className="text-xs text-muted-foreground">
-              {((200 / totalCategories) * 100).toFixed(1)}% of total
+              {((activeCategories / totalCategories) * 100).toFixed(1)}% of
+              total
             </p>
           </CardContent>
         </Card>
@@ -274,7 +282,7 @@ export function CategoryManagement({
             setSelectedCategory(null);
             setIsFormOpen(true);
           }}
-          className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+          className="rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 cursor-pointer"
         >
           <Plus className="mr-2 h-4 w-4" />
           Add Category
@@ -341,10 +349,10 @@ export function CategoryManagement({
                     </TableCell>
                     <TableCell>
                       <Badge
-                        variant={category.isActive ? "default" : "secondary"}
+                        variant={category.is_active ? "default" : "secondary"}
                         className="rounded-full"
                       >
-                        {category.isActive ? "Active" : "Inactive"}
+                        {category.is_active ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
@@ -377,7 +385,7 @@ export function CategoryManagement({
                           // onClick={() => handleToggleStatus(category)}
                           >
                             <Tag className="mr-2 h-4 w-4" />
-                            {category.isActive ? "Deactivate" : "Activate"}
+                            {category.is_active ? "Deactivate" : "Activate"}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleDeleteCategory(category)}

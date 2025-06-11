@@ -17,14 +17,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
+import { createCategory, updateCategory } from "@/app/actions/categories";
+import { toast } from "sonner";
 
 interface Category {
   id: string;
   name: string;
   description: string;
   color: string;
-  recipe_count: string;
-  isActive: boolean;
+  recipe_count?: string;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -33,7 +35,7 @@ interface CategoryFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   category?: Category | null;
-  onSubmit: (data: Omit<Category, "id" | "createdAt" | "updatedAt">) => void;
+  onSubmit: (data: Omit<Category, "id" | "created_at" | "updated_at">) => void;
 }
 
 const predefinedColors = [
@@ -66,7 +68,7 @@ export function CategoryForm({
     description: "",
     color: "#FF6B6B",
     recipe_count: 0,
-    isActive: true,
+    is_active: true,
   });
 
   useEffect(() => {
@@ -75,8 +77,8 @@ export function CategoryForm({
         name: category.name,
         description: category.description,
         color: category.color,
-        recipe_count: parseInt(category.recipe_count),
-        isActive: category.isActive,
+        recipe_count: parseInt(category.recipe_count || "0"),
+        is_active: category.is_active,
       });
     } else {
       setFormData({
@@ -84,7 +86,7 @@ export function CategoryForm({
         description: "",
         color: "#FF6B6B",
         recipe_count: 0,
-        isActive: true,
+        is_active: true,
       });
     }
   }, [category]);
@@ -94,11 +96,45 @@ export function CategoryForm({
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      onSubmit(formData);
+      const categoryData = {
+        name: formData.name,
+        description: formData.description,
+        color: formData.color,
+        is_active: formData.is_active,
+      };
+
+      let response;
+      if (category) {
+        // Update existing category
+        response = await updateCategory({
+          ...categoryData,
+          id: category.id,
+        });
+        toast.success("Category updated successfully");
+      } else {
+        // Create new category
+        response = await createCategory(categoryData);
+        toast.success("Category created successfully");
+        // Reset form data only for new categories
+        setFormData({
+          name: "",
+          description: "",
+          color: "#FF6B6B",
+          recipe_count: 0,
+          is_active: true,
+        });
+      }
+
+      if (response) {
+        onSubmit(categoryData);
+      }
     } catch (error) {
-      console.error("Error saving category:", error);
+      console.error("Error in form submission:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : `Failed to ${category ? "update" : "create"} category`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -176,19 +212,19 @@ export function CategoryForm({
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
-                id="isActive"
-                checked={formData.isActive}
+                id="is_active"
+                checked={formData.is_active}
                 onChange={(e) =>
-                  setFormData({ ...formData, isActive: e.target.checked })
+                  setFormData({ ...formData, is_active: e.target.checked })
                 }
                 className="rounded"
               />
               <Label htmlFor="isActive">Active Category</Label>
               <Badge
-                variant={formData.isActive ? "default" : "secondary"}
+                variant={formData.is_active ? "default" : "secondary"}
                 className="ml-2 rounded-full"
               >
-                {formData.isActive ? "Active" : "Inactive"}
+                {formData.is_active ? "Active" : "Inactive"}
               </Badge>
             </div>
           </div>
@@ -205,7 +241,7 @@ export function CategoryForm({
             <Button
               type="submit"
               disabled={isLoading}
-              className="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+              className="rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {category ? "Update Category" : "Create Category"}
