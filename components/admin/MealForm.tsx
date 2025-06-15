@@ -158,6 +158,7 @@ interface MealFormProps {
     }[];
   } | null;
   onSubmit: (values: MealFormValues) => void;
+  categories: any[];
 }
 
 export function MealForm({
@@ -165,6 +166,7 @@ export function MealForm({
   onOpenChange,
   initialData,
   onSubmit,
+  categories,
 }: MealFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(
@@ -281,9 +283,14 @@ export function MealForm({
       console.log("About to call onSubmit with values:", transformedValues);
       await onSubmit(transformedValues);
       console.log("onSubmit called successfully");
+      onOpenChange(false); // Close the dialog after successful submission
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Failed to save meal. Please try again.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to save meal. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -336,10 +343,7 @@ export function MealForm({
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((values) => {
-              console.log("Form onSubmit event triggered");
-              handleSubmit(values);
-            })}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-6"
           >
             <Tabs
@@ -413,13 +417,22 @@ export function MealForm({
 
                   <FormField
                     control={form.control as FormControl}
-                    name="category.name"
+                    name="category"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category</FormLabel>
                         <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          onValueChange={(value) => {
+                            const selectedCategory = categories.find(
+                              (cat) => cat.id === value
+                            );
+                            field.onChange({
+                              id: selectedCategory?.id || "",
+                              name: selectedCategory?.name || "",
+                              description: selectedCategory?.description || "",
+                            });
+                          }}
+                          defaultValue={field.value?.id}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -427,19 +440,11 @@ export function MealForm({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="High Protein">
-                              High Protein
-                            </SelectItem>
-                            <SelectItem value="Vegetarian">
-                              Vegetarian
-                            </SelectItem>
-                            <SelectItem value="Low Calorie">
-                              Low Calorie
-                            </SelectItem>
-                            <SelectItem value="Family Friendly">
-                              Family Friendly
-                            </SelectItem>
-                            <SelectItem value="Seafood">Seafood</SelectItem>
+                            {categories.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -128,13 +128,14 @@ export function CategoryForm({
       if (response) {
         onSubmit(categoryData);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error in form submission:", error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : `Failed to ${category ? "update" : "create"} category`
-      );
+      // Show more detailed error message
+      const errorMessage =
+        error?.message ||
+        error?.response?.data?.message ||
+        `Failed to ${category ? "update" : "create"} category`;
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

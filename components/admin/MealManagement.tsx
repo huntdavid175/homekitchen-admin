@@ -59,9 +59,11 @@ interface PaginationProps {
 
 export function MealManagement({
   meals,
+  categories,
   pagination,
 }: {
   meals: any[];
+  categories: any[];
   pagination: PaginationProps;
 }) {
   const router = useRouter();
@@ -123,7 +125,7 @@ export function MealManagement({
         image_url: values.image_url || null,
         category_id: values.category.id,
         ingredients: values.ingredients.map((ing: any) => ({
-          ingredient_id: ing.id || "", // You might need to handle this differently
+          name: ing.name,
           quantity: parseFloat(ing.quantity),
           unit: ing.unit,
           is_shipped: ing.is_shipped,
@@ -672,6 +674,7 @@ export function MealManagement({
         onOpenChange={setShowAddMealDialog}
         initialData={null}
         onSubmit={handleAddMeal}
+        categories={categories}
       />
 
       {/* Edit Meal Dialog */}
@@ -681,6 +684,7 @@ export function MealManagement({
           onOpenChange={setShowEditMealDialog}
           initialData={selectedMeal}
           onSubmit={handleUpdateMeal}
+          categories={categories}
         />
       )}
     </div>

@@ -14,7 +14,7 @@ interface CreateRecipeData {
   image_url?: string;
   category_id: string;
   ingredients: {
-    ingredient_id: string;
+    name: string;
     quantity: number;
     unit?: string;
     is_shipped: boolean;
@@ -73,6 +73,8 @@ interface UpdateRecipeData {
 export async function createRecipe(data: CreateRecipeData) {
   const supabase = await createClient();
   const cookieStore = cookies();
+
+  console.log(data);
 
   const {
     data: { session },
