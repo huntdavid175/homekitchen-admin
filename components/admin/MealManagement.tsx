@@ -111,51 +111,15 @@ export function MealManagement({
     }, 600);
   };
 
-  const handleAddMeal = async (values: any) => {
-    console.log("Adding meal:", values);
+  const handleAddMeal = async (formData: FormData) => {
     try {
-      // Transform the form data to match the API's expected format
-      const createData = {
-        name: values.recipe_name,
-        subname: values.subname,
-        description: values.description,
-        difficulty: values.difficulty,
-        cooking_time: parseInt(values.cooking_time),
-        total_time: parseInt(values.total_time),
-        image_url: values.image_url || null,
-        category_id: values.category.id,
-        ingredients: values.ingredients.map((ing: any) => ({
-          name: ing.name,
-          quantity: parseFloat(ing.quantity),
-          unit: ing.unit,
-          is_shipped: ing.is_shipped,
-        })),
-        cooking_steps: values.cooking_steps.map((step: any) => ({
-          step_number: step.step_number,
-          instruction: step.instruction,
-          image_url: step.image_url || null,
-        })),
-        tags:
-          values.tags?.map((tag: any) => ({
-            name: tag.name,
-          })) || [],
-        cooking_tools: values.cooking_tools.map((tool: any) => ({
-          name: tool.name,
-          description: tool.description,
-        })),
-        nutritions: values.nutritions.map((nutrition: any) => ({
-          nutrition: nutrition.nutrition,
-          value: nutrition.value,
-        })),
-      };
-
       // Validate category_id before sending
-      if (!createData.category_id) {
+      const categoryId = formData.get("category_id");
+      if (!categoryId) {
         throw new Error("Category ID is required");
       }
 
-      console.log("Sending create data:", createData);
-      await createRecipe(createData);
+      await createRecipe(formData);
       console.log("Create successful");
 
       // Show success message
@@ -177,9 +141,18 @@ export function MealManagement({
   };
 
   const handleEditMeal = (meal: any) => {
-    console.log("Editing meal:", meal);
+    console.log("Original meal data:", meal);
     // First close the dialog if it's open
     setShowEditMealDialog(false);
+
+    // Map the ingredients to include ingredient_id
+    const mappedIngredients = meal.ingredients.map((ingredient: any) => ({
+      ...ingredient,
+      ingredient_id: ingredient.ingredient_id || ingredient.id,
+    }));
+
+    console.log("Mapped ingredients:", mappedIngredients);
+
     // Then set the new meal data
     setSelectedMeal({
       recipe_id: meal.recipe_id,
@@ -193,20 +166,21 @@ export function MealManagement({
       status: meal.status,
       image_url: meal.image_url,
       category: meal.category,
-      ingredients: meal.ingredients,
+      ingredients: mappedIngredients,
       cooking_tools: meal.cooking_tools,
       cooking_steps: meal.cooking_steps,
       nutritions: meal.nutritions,
       tags: meal.tags,
     });
+
     // Use setTimeout to ensure the dialog is closed before opening with new data
     setTimeout(() => {
       setShowEditMealDialog(true);
     }, 100);
   };
 
-  const handleUpdateMeal = async (values: any) => {
-    console.log("handleUpdateMeal called with values:", values);
+  const handleUpdateMeal = async (formData: FormData) => {
+    console.log("handleUpdateMeal called with FormData");
     console.log("Selected meal:", selectedMeal);
 
     if (!selectedMeal?.recipe_id) {
@@ -216,59 +190,14 @@ export function MealManagement({
     }
 
     try {
-      // Transform the form data to match the API's expected format
-      const updateData = {
-        name: values.recipe_name,
-        subname: values.subname,
-        description: values.description,
-        difficulty: values.difficulty,
-        cooking_time: parseInt(values.cooking_time),
-        total_time: parseInt(values.total_time),
-        image_url: values.image_url || null,
-        category_id: values.category?.id || selectedMeal.category.id,
-        ingredients: values.ingredients.map((ing: any) => {
-          // Find the matching ingredient from the original meal data
-          const originalIngredient = selectedMeal.ingredients.find(
-            (origIng: any) => origIng.name === ing.name
-          );
-
-          if (!originalIngredient?.id) {
-            throw new Error(`Ingredient ID not found for: ${ing.name}`);
-          }
-
-          return {
-            ingredient_id: originalIngredient.id,
-            quantity: parseFloat(ing.quantity),
-            unit: ing.unit,
-            is_shipped: ing.is_shipped,
-          };
-        }),
-        cooking_steps: values.cooking_steps.map((step: any) => ({
-          step_number: step.step_number,
-          instruction: step.instruction,
-          image_url: step.image_url || null,
-        })),
-        tags:
-          values.tags?.map((tag: any) => ({
-            name: tag.name,
-          })) || [],
-        cooking_tools: values.cooking_tools.map((tool: any) => ({
-          name: tool.name,
-          description: tool.description,
-        })),
-        nutritions: values.nutritions.map((nutrition: any) => ({
-          nutrition: nutrition.nutrition,
-          value: nutrition.value,
-        })),
-      };
-
       // Validate category_id before sending
-      if (!updateData.category_id) {
+      const categoryId = formData.get("category_id");
+      if (!categoryId) {
         throw new Error("Category ID is required");
       }
 
-      console.log("Sending update data:", updateData);
-      await updateRecipe(selectedMeal.recipe_id, updateData);
+      console.log("Sending update data");
+      await updateRecipe(selectedMeal.recipe_id, formData);
       console.log("Update successful");
 
       // Show success message
@@ -472,8 +401,7 @@ export function MealManagement({
                             </Badge>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
-                            {/* {meal.price} */}
-                            10.13
+                            {meal.price}
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">
                             {/* {meal.calories} cal */}
@@ -486,13 +414,13 @@ export function MealManagement({
                             <Badge
                               variant="outline"
                               className={`rounded-full px-3 py-1 text-xs font-medium ${
-                                meal.status === "Active"
+                                meal.status === "active"
                                   ? "bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700"
                                   : "bg-gray-50 text-gray-700 hover:bg-gray-50 hover:text-gray-700"
                               }`}
                             >
-                              {/* {meal.status} */}
-                              Active
+                              {meal.status.charAt(0).toUpperCase() +
+                                meal.status.slice(1)}
                             </Badge>
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100">

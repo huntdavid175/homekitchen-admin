@@ -13,6 +13,7 @@ interface CreateRecipeData {
   total_time: number;
   image_url?: string;
   category_id: string;
+  status: "active" | "inactive";
   ingredients: {
     name: string;
     quantity: number;
@@ -46,8 +47,9 @@ interface UpdateRecipeData {
   total_time: number;
   image_url?: string;
   category_id: string;
+  status: "active" | "inactive";
   ingredients: {
-    ingredient_id: string;
+    name: string;
     quantity: number;
     unit?: string;
     is_shipped: boolean;
@@ -70,11 +72,9 @@ interface UpdateRecipeData {
   }[];
 }
 
-export async function createRecipe(data: CreateRecipeData) {
+export async function createRecipe(formData: FormData) {
   const supabase = await createClient();
   const cookieStore = cookies();
-
-  console.log(data);
 
   const {
     data: { session },
@@ -85,20 +85,26 @@ export async function createRecipe(data: CreateRecipeData) {
   }
 
   try {
+    // Log the FormData contents
+    console.log("Server received FormData contents:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/recipes`,
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify(data),
+        body: formData,
       }
     );
 
     if (!response.ok) {
       const error = await response.json();
+      console.error("Server error response:", error);
       throw new Error(error.message || "Failed to create recipe");
     }
 
@@ -112,7 +118,7 @@ export async function createRecipe(data: CreateRecipeData) {
   }
 }
 
-export async function updateRecipe(recipeId: string, data: UpdateRecipeData) {
+export async function updateRecipe(recipeId: string, formData: FormData) {
   const supabase = await createClient();
   const cookieStore = cookies();
 
@@ -130,10 +136,9 @@ export async function updateRecipe(recipeId: string, data: UpdateRecipeData) {
       {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify(data),
+        body: formData,
       }
     );
 

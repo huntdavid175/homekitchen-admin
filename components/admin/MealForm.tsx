@@ -44,7 +44,7 @@ import { toast } from "sonner";
 
 const ingredientSchema = z.object({
   name: z.string().min(1, "Ingredient name is required"),
-  description: z.string().optional(),
+  description: z.string().nullable().optional(),
   quantity: z.string().min(1, "Quantity is required"),
   unit: z.string().optional(),
   is_shipped: z.boolean().default(false),
@@ -52,7 +52,7 @@ const ingredientSchema = z.object({
 
 const toolSchema = z.object({
   name: z.string().min(1, "Tool name is required"),
-  description: z.string().optional(),
+  description: z.string().nullable().optional(),
 });
 
 const stepSchema = z.object({
@@ -138,6 +138,8 @@ interface MealFormProps {
       quantity: string;
       unit?: string;
       is_shipped: boolean;
+      ingredient_id?: string;
+      id?: string;
     }[];
     cooking_tools: {
       name: string;
@@ -157,7 +159,7 @@ interface MealFormProps {
       name: string;
     }[];
   } | null;
-  onSubmit: (values: MealFormValues) => void;
+  onSubmit: (formData: FormData) => Promise<void>;
   categories: any[];
 }
 
@@ -270,26 +272,126 @@ export function MealForm({
     console.log("Form submitted with values:", values);
     setIsSubmitting(true);
     try {
-      // Transform the form data to ensure image_urls are properly handled
-      const transformedValues = {
-        ...values,
-        image_url: values.image_url || null,
-        cooking_steps: values.cooking_steps.map((step) => ({
-          ...step,
-          image_url: step.image_url || null,
-        })),
-      };
+      const formData = new FormData();
 
-      console.log("About to call onSubmit with values:", transformedValues);
-      await onSubmit(transformedValues);
-      console.log("onSubmit called successfully");
-      onOpenChange(false); // Close the dialog after successful submission
+      // Add basic fields - ensure these are set first
+      if (!values.recipe_name) {
+        throw new Error("Recipe name is required");
+      }
+      if (!values.category?.id) {
+        throw new Error("Category is required");
+      }
+
+      // Set the required fields
+      formData.set("name", values.recipe_name);
+      formData.set("category_id", values.category.id);
+
+      // Add other fields
+      if (values.subname) formData.set("subname", values.subname);
+      formData.set("description", values.description);
+      formData.set("difficulty", values.difficulty);
+      formData.set("cooking_time", values.cooking_time);
+      formData.set("total_time", values.total_time);
+      formData.set("price", values.price);
+      formData.set("status", values.status);
+
+      // Add ingredients with their IDs
+      const ingredientsData = values.ingredients.map((ing, index) => {
+        // Get the original ingredient from initialData to preserve the ID
+        const originalIngredient = initialData?.ingredients[index];
+        console.log("Original ingredient:", originalIngredient);
+
+        const ingredientData = {
+          name: ing.name,
+          quantity: parseFloat(ing.quantity),
+          unit: ing.unit,
+          is_shipped: ing.is_shipped,
+        };
+
+        // Only add ingredient_id if we're editing and have an original ingredient
+        if (isEditing && originalIngredient) {
+          Object.assign(ingredientData, {
+            ingredient_id:
+              originalIngredient.id || originalIngredient.ingredient_id,
+          });
+        }
+
+        return ingredientData;
+      });
+
+      console.log("Ingredients data being sent:", ingredientsData);
+      formData.append("ingredients", JSON.stringify(ingredientsData));
+
+      // Add cooking tools
+      const toolsData = values.cooking_tools.map((tool) => ({
+        name: tool.name,
+        description: tool.description,
+      }));
+      formData.append("cooking_tools", JSON.stringify(toolsData));
+
+      // Add cooking steps with images
+      const stepsWithImages = await Promise.all(
+        values.cooking_steps.map(async (step, index) => {
+          const stepData = {
+            step_number: step.step_number,
+            instruction: step.instruction,
+            image_url: step.image_url,
+          };
+
+          // If there's an image for this step
+          if (
+            stepImagePreviews[index] &&
+            stepImagePreviews[index].startsWith("data:image")
+          ) {
+            // Convert base64 to blob
+            const response = await fetch(stepImagePreviews[index]);
+            const blob = await response.blob();
+            formData.append(
+              `step_image_${index}`,
+              blob,
+              `step-${index}-image.jpg`
+            );
+            stepData.image_url = `step_image_${index}`;
+          }
+
+          return stepData;
+        })
+      );
+
+      formData.append("cooking_steps", JSON.stringify(stepsWithImages));
+
+      // Add nutritions
+      const nutritionsData = values.nutritions.map((nutrition) => ({
+        nutrition: nutrition.nutrition,
+        value: nutrition.value,
+      }));
+      formData.append("nutritions", JSON.stringify(nutritionsData));
+
+      // Add tags if they exist
+      if (values.tags && values.tags.length > 0) {
+        const tagsData = values.tags.map((tag) => ({
+          name: tag.name,
+        }));
+        formData.append("tags", JSON.stringify(tagsData));
+      }
+
+      // Log final FormData contents
+      console.log("Final FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      // Call the onSubmit handler with the FormData
+      await onSubmit(formData);
+
+      // Close the dialog on success
+      onOpenChange(false);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to save meal. Please try again."
+          : "Failed to submit form. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -620,6 +722,10 @@ export function MealForm({
                                     <Input
                                       placeholder="Salmon fillet"
                                       {...field}
+                                      data-ingredient-id={
+                                        initialData?.ingredients[index]
+                                          ?.ingredient_id
+                                      }
                                     />
                                   </FormControl>
                                   <FormMessage />

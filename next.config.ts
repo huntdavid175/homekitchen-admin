@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       "veganhuggs.com",
       "images.immediate.co.uk",
       "www.metro.ca",
+      "res.cloudinary.com",
     ], // Add your image domains here
   },
 };
