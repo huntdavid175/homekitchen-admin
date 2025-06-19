@@ -78,13 +78,13 @@ export default async function MealsPage({
     getCategories(),
   ]);
 
-  console.log(meals.data);
+  // console.log(meals.data);
 
-  const garlic_meal = meals.data.find(
-    (meal: any) => meal.recipe_name === "Roasted plantain"
-  );
+  // const garlic_meal = meals.data.find(
+  //   (meal: any) => meal.recipe_name === "Roasted plantain"
+  // );
 
-  console.log(garlic_meal);
+  // console.log(garlic_meal);
 
   return (
     <MealManagement

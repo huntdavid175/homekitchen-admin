@@ -361,7 +361,7 @@ export function MealManagement({
                     {filteredMeals.length > 0 ? (
                       filteredMeals.map((meal, index) => (
                         <TableRow
-                          key={meal.id}
+                          key={meal.recipe_id || meal.id || `meal-${index}`}
                           className="transition-all duration-300 hover:bg-gray-50 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
                           style={{
                             animationDelay: `${

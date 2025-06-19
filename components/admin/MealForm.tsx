@@ -295,6 +295,14 @@ export function MealForm({
       formData.set("price", values.price);
       formData.set("status", values.status);
 
+      // Handle main recipe image if it exists and is a data URL
+      if (imagePreview && imagePreview.startsWith("data:image")) {
+        // Convert base64 to blob
+        const response = await fetch(imagePreview);
+        const blob = await response.blob();
+        formData.append("image", blob, "recipe-image.jpg");
+      }
+
       // Add ingredients with their IDs
       const ingredientsData = values.ingredients.map((ing, index) => {
         // Get the original ingredient from initialData to preserve the ID
@@ -347,11 +355,11 @@ export function MealForm({
             const response = await fetch(stepImagePreviews[index]);
             const blob = await response.blob();
             formData.append(
-              `step_image_${index}`,
+              "step_images",
               blob,
-              `step-${index}-image.jpg`
+              `step_${step.step_number}_image.jpg`
             );
-            stepData.image_url = `step_image_${index}`;
+            stepData.image_url = `step_${step.step_number}_image.jpg`;
           }
 
           return stepData;
