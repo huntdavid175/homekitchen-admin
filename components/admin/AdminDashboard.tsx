@@ -139,7 +139,7 @@ export function AdminDashboard({
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
-                      Active Subscriptions
+                      Total Orders Today
                     </CardTitle>
                     <CreditCard className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
@@ -205,24 +205,6 @@ export function AdminDashboard({
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
-                      Active Subscriptions
-                    </CardTitle>
-                    <CreditCard className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <div className="text-2xl font-bold">+2,350</div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      +180 this week
-                    </p>
-                    <div className="mt-4 flex items-center gap-1 text-xs text-green-600 font-medium">
-                      <ArrowUp className="h-3 w-3" />
-                      <span>12.5%</span>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
-                    <CardTitle className="text-sm font-medium">
                       Active Users
                     </CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
@@ -252,6 +234,25 @@ export function AdminDashboard({
                     </div>
                   </CardContent>
                 </Card>
+                <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
+                    <CardTitle className="text-sm font-medium">
+                      Total Orders Today
+                    </CardTitle>
+                    <CreditCard className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <div className="text-2xl font-bold">+2,350</div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      +180 this week
+                    </p>
+                    <div className="mt-4 flex items-center gap-1 text-xs text-green-600 font-medium">
+                      <ArrowUp className="h-3 w-3" />
+                      <span>12.5%</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-emerald-50 to-green-50">
                     <CardTitle className="text-sm font-medium">
