@@ -44,9 +44,23 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { MealForm } from "@/components/admin/MealForm";
-import { updateRecipe, createRecipe } from "@/app/actions/recipes";
+import {
+  updateRecipe,
+  createRecipe,
+  deleteRecipe,
+} from "@/app/actions/recipes";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface PaginationProps {
   currentPage: number;
@@ -72,6 +86,8 @@ export function MealManagement({
   const [showAddMealDialog, setShowAddMealDialog] = useState(false);
   const [showEditMealDialog, setShowEditMealDialog] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<any>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [mealToDelete, setMealToDelete] = useState<any>(null);
 
   // Filter meals based on search term
   const filteredMeals = meals.filter(
@@ -211,6 +227,31 @@ export function MealManagement({
         error instanceof Error
           ? error.message
           : "Failed to update meal. Please try again."
+      );
+    }
+  };
+
+  const handleDeleteClick = (meal: any) => {
+    setMealToDelete(meal);
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!mealToDelete) return;
+
+    try {
+      await deleteRecipe(mealToDelete.recipe_id);
+      toast.success("Meal deleted successfully");
+      setShowDeleteDialog(false);
+      setMealToDelete(null);
+      // Optionally, force a refresh or rely on revalidation
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting meal:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to delete meal. Please try again."
       );
     }
   };
@@ -465,16 +506,10 @@ export function MealManagement({
                                     Duplicate Meal
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator />
-                                  {meal.status === "Active" ? (
-                                    <DropdownMenuItem className="text-amber-600">
-                                      Deactivate Meal
-                                    </DropdownMenuItem>
-                                  ) : (
-                                    <DropdownMenuItem className="text-green-600">
-                                      Activate Meal
-                                    </DropdownMenuItem>
-                                  )}
-                                  <DropdownMenuItem className="text-red-600">
+                                  <DropdownMenuItem
+                                    className="text-red-600 focus:text-red-700 focus:bg-red-50"
+                                    onClick={() => handleDeleteClick(meal)}
+                                  >
                                     Delete Meal
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
@@ -615,6 +650,28 @@ export function MealManagement({
           categories={categories}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              meal and remove its data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

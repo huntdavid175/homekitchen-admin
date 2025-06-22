@@ -178,6 +178,13 @@ export function MealForm({
   const [stepImagePreviews, setStepImagePreviews] = useState<
     Record<number, string>
   >({});
+  const allowedImageTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
+  const allowedImageExtensions = ".jpg,.jpeg,.png,.gif,.webp";
 
   const isEditing = !!initialData;
 
@@ -268,6 +275,46 @@ export function MealForm({
     name: "cooking_steps",
   });
 
+  // Custom remove step function that handles image previews
+  const handleRemoveStep = (index: number) => {
+    // Remove the step image preview
+    setStepImagePreviews((prev) => {
+      const newPreviews = { ...prev };
+      delete newPreviews[index];
+      // Shift all subsequent image previews down by one
+      const shiftedPreviews: Record<number, string> = {};
+      Object.keys(newPreviews).forEach((key) => {
+        const keyNum = parseInt(key);
+        if (keyNum > index) {
+          shiftedPreviews[keyNum - 1] = newPreviews[keyNum];
+        } else {
+          shiftedPreviews[keyNum] = newPreviews[keyNum];
+        }
+      });
+      return shiftedPreviews;
+    });
+
+    // Remove the step
+    removeStep(index);
+  };
+
+  // Update step numbers when steps are added/removed
+  useEffect(() => {
+    const steps = form.getValues("cooking_steps");
+    const updatedSteps = steps.map((step, index) => ({
+      ...step,
+      step_number: index + 1,
+    }));
+    form.setValue("cooking_steps", updatedSteps);
+    console.log(
+      "Updated step numbers:",
+      updatedSteps.map((s) => ({
+        step_number: s.step_number,
+        instruction: s.instruction,
+      }))
+    );
+  }, [stepFields.length, form]);
+
   const handleSubmit = async (values: MealFormValues) => {
     console.log("Form submitted with values:", values);
     setIsSubmitting(true);
@@ -351,21 +398,26 @@ export function MealForm({
             stepImagePreviews[index] &&
             stepImagePreviews[index].startsWith("data:image")
           ) {
+            console.log(
+              `Processing image for step ${index + 1} (step_number: ${
+                step.step_number
+              })`
+            );
             // Convert base64 to blob
             const response = await fetch(stepImagePreviews[index]);
             const blob = await response.blob();
-            formData.append(
-              "step_images",
-              blob,
-              `step_${step.step_number}_image.jpg`
+            formData.append("step_images", blob, `step_${index + 1}_image.jpg`);
+            stepData.image_url = `step_${index + 1}_image.jpg`;
+            console.log(
+              `Added image for step ${index + 1}: step_${index + 1}_image.jpg`
             );
-            stepData.image_url = `step_${step.step_number}_image.jpg`;
           }
 
           return stepData;
         })
       );
 
+      console.log("Final steps with images:", stepsWithImages);
       formData.append("cooking_steps", JSON.stringify(stepsWithImages));
 
       // Add nutritions
@@ -409,6 +461,13 @@ export function MealForm({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!allowedImageTypes.includes(file.type)) {
+        toast.error(
+          `Invalid file type. Please upload one of: ${allowedImageExtensions}`
+        );
+        e.target.value = ""; // Clear the input
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         setImagePreview(reader.result as string);
@@ -423,6 +482,13 @@ export function MealForm({
   ) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!allowedImageTypes.includes(file.type)) {
+        toast.error(
+          `Invalid file type. Please upload one of: ${allowedImageExtensions}`
+        );
+        e.target.value = ""; // Clear the input
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         const imageUrl = reader.result as string;
@@ -499,7 +565,7 @@ export function MealForm({
                           </p>
                           <Input
                             type="file"
-                            accept="image/*"
+                            accept={allowedImageExtensions}
                             className="w-full max-w-xs"
                             onChange={handleImageChange}
                           />
@@ -854,7 +920,7 @@ export function MealForm({
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        appendStep({ step_number: 1, instruction: "" })
+                        appendStep({ step_number: 0, instruction: "" })
                       }
                       className="flex items-center gap-1"
                     >
@@ -870,7 +936,7 @@ export function MealForm({
                           variant="ghost"
                           size="icon"
                           className="absolute right-2 top-2 h-6 w-6 text-gray-400 hover:text-red-500"
-                          onClick={() => removeStep(index)}
+                          onClick={() => handleRemoveStep(index)}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -941,7 +1007,7 @@ export function MealForm({
                                     </p>
                                     <Input
                                       type="file"
-                                      accept="image/*"
+                                      accept={allowedImageExtensions}
                                       className="w-full max-w-xs"
                                       onChange={(e) =>
                                         handleStepImageChange(e, index)

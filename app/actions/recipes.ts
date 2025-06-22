@@ -156,3 +156,40 @@ export async function updateRecipe(recipeId: string, formData: FormData) {
     throw error;
   }
 }
+
+export async function deleteRecipe(recipeId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    throw new Error("No active session");
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/recipes/${recipeId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to delete recipe");
+    }
+
+    // Revalidate the meals page to reflect the deletion
+    revalidatePath("/meals");
+
+    return { success: true, message: "Recipe deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting recipe:", error);
+    throw error;
+  }
+}
