@@ -1,7 +1,7 @@
 import { MealManagement } from "@/components/admin/MealManagement";
 import { createClient } from "@/utils/supabase/server";
 
-async function getMeals(page: string) {
+async function getMeals(page: string, status?: string) {
   const supabase = await createClient();
 
   const {
@@ -12,26 +12,23 @@ async function getMeals(page: string) {
     throw new Error("No active session");
   }
 
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/recipes?page=${page}&limit=10`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        cache: "no-store",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch meals: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching meals:", error);
-    throw error;
+  let url = `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/recipes?page=${page}&limit=10`;
+  if (status && status !== "all") {
+    url += `&status=${status}`;
   }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch meals: ${response.statusText}`);
+  }
+
+  return response.json();
 }
 
 async function getCategories() {
@@ -45,36 +42,33 @@ async function getCategories() {
     throw new Error("No active session");
   }
 
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/categories`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        cache: "no-store",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch categories: ${response.statusText}`);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_URL}/api/categories`,
+    {
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      cache: "no-store",
     }
+  );
 
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
+  if (!response.ok) {
+    throw new Error(`Failed to fetch categories: ${response.statusText}`);
   }
+
+  return response.json();
 }
 
-export default async function MealsPage({
-  searchParams,
-}: {
-  searchParams: { page?: string };
+export default async function MealsPage(props: {
+  searchParams:
+    | { page?: string; status?: string }
+    | Promise<{ page?: string; status?: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const page = searchParams.page || "1";
+  const status = searchParams.status;
   const [meals, categories] = await Promise.all([
-    getMeals(page),
+    getMeals(page, status),
     getCategories(),
   ]);
 

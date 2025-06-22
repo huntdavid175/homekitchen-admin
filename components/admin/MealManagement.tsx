@@ -82,6 +82,7 @@ export function MealManagement({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const currentStatus = searchParams.get("status") || "all";
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddMealDialog, setShowAddMealDialog] = useState(false);
   const [showEditMealDialog, setShowEditMealDialog] = useState(false);
@@ -100,6 +101,17 @@ export function MealManagement({
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
+    router.push(`/meals?${params.toString()}`);
+  };
+
+  const handleStatusChange = (status: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1"); // Reset to first page on filter change
+    if (status === "all") {
+      params.delete("status");
+    } else {
+      params.set("status", status);
+    }
     router.push(`/meals?${params.toString()}`);
   };
 
@@ -347,7 +359,7 @@ export function MealManagement({
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Tabs defaultValue="all">
+          <Tabs value={currentStatus} onValueChange={handleStatusChange}>
             <TabsList className="p-4 justify-start gap-2 bg-transparent">
               <TabsTrigger
                 value="all"
@@ -369,7 +381,7 @@ export function MealManagement({
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="all" className="mt-0">
+            <TabsContent value={currentStatus} className="mt-0">
               <div className="overflow-x-auto">
                 <Table className="border-collapse border-spacing-0">
                   <TableHeader>
@@ -614,18 +626,6 @@ export function MealManagement({
                   </div>
                 </div>
               )}
-            </TabsContent>
-
-            <TabsContent value="active" className="mt-0">
-              <div className="p-6 text-center text-muted-foreground">
-                Active meals view is under development.
-              </div>
-            </TabsContent>
-
-            <TabsContent value="inactive" className="mt-0">
-              <div className="p-6 text-center text-muted-foreground">
-                Inactive meals view is under development.
-              </div>
             </TabsContent>
           </Tabs>
         </CardContent>
