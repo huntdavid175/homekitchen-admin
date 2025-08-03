@@ -5,19 +5,12 @@ import { cookies } from "next/headers";
 export const dynamic = "force-dynamic";
 
 interface OrdersPageProps {
-  searchParams:
-    | {
-        page?: string;
-        limit?: string;
-        status?: string;
-        deliveryDate?: string;
-      }
-    | Promise<{
-        page?: string;
-        limit?: string;
-        status?: string;
-        deliveryDate?: string;
-      }>;
+  searchParams: Promise<{
+    page?: string;
+    limit?: string;
+    status?: string;
+    deliveryDate?: string;
+  }>;
 }
 
 async function getOrders(
