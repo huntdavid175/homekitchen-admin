@@ -56,13 +56,13 @@ export function AdminSettings() {
           >
             General
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value="notifications"
             className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
           >
             Notifications
-          </TabsTrigger>
-          <TabsTrigger
+          </TabsTrigger> */}
+          {/* <TabsTrigger
             value="delivery"
             className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
           >
@@ -85,7 +85,7 @@ export function AdminSettings() {
             className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
           >
             API
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="general" className="space-y-6">

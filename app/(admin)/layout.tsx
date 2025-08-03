@@ -77,18 +77,18 @@ export default function AdminLayout({
     //   href: "/subscriptions",
     //   active: pathname === "/subscriptions",
     // },
-    {
-      label: "Payments",
-      icon: CreditCard,
-      href: "/payments",
-      active: pathname === "/payments",
-    },
-    {
-      label: "Delivery Schedule",
-      icon: Calendar,
-      href: "/schedule",
-      active: pathname === "/schedule",
-    },
+    // {
+    //   label: "Payments",
+    //   icon: CreditCard,
+    //   href: "/payments",
+    //   active: pathname === "/payments",
+    // },
+    // {
+    //   label: "Delivery Schedule",
+    //   icon: Calendar,
+    //   href: "/schedule",
+    //   active: pathname === "/schedule",
+    // },
     // {
     //   label: "Analytics",
     //   icon: BarChart3,

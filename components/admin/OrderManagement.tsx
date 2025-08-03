@@ -442,7 +442,7 @@ export function OrderManagement({
                         >
                           <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
                             {/* {order.id} */}
-                            ORD-0{index}
+                            {order.formatted_order_number}
                           </TableCell>
                           <TableCell className="py-3 px-4 border-t border-gray-100 font-medium">
                             {order.user.name}
