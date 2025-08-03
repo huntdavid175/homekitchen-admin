@@ -6,13 +6,13 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
 interface UserOrdersPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     page?: string;
     limit?: string;
-  };
+  }>;
 }
 
 async function getUserOrders(
@@ -52,9 +52,11 @@ export default async function UserOrdersPage({
   params,
   searchParams,
 }: UserOrdersPageProps) {
-  const userId = params.id;
-  const page = Number(searchParams.page) || 1;
-  const limit = Number(searchParams.limit) || 10;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const userId = resolvedParams.id;
+  const page = Number(resolvedSearchParams.page) || 1;
+  const limit = Number(resolvedSearchParams.limit) || 10;
 
   const ordersData = await getUserOrders(userId, page, limit);
 
