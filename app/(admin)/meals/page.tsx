@@ -60,9 +60,7 @@ async function getCategories() {
 }
 
 export default async function MealsPage(props: {
-  searchParams:
-    | { page?: string; status?: string }
-    | Promise<{ page?: string; status?: string }>;
+  searchParams: Promise<{ page?: string; status?: string }>;
 }) {
   const searchParams = await props.searchParams;
   const page = searchParams.page || "1";
