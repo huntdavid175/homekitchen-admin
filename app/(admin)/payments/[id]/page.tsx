@@ -4,15 +4,16 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface PaymentDetailsPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function PaymentDetailsPage({
+export default async function PaymentDetailsPage({
   params,
 }: PaymentDetailsPageProps) {
-  const paymentId = params.id;
+  const resolvedParams = await params;
+  const paymentId = resolvedParams.id;
 
   return (
     <div className="space-y-6">
