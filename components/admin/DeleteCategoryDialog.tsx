@@ -74,7 +74,7 @@ export function DeleteCategoryDialog({
           <AlertDialogDescription className="space-y-3">
             <p>
               Are you sure you want to delete the category{" "}
-              <span className="font-semibold">"{category.name}"</span>?
+              <span className="font-semibold">&quot;{category.name}&quot;</span>?
             </p>
 
             <div className="p-3 bg-red-50 rounded-lg border border-red-200">

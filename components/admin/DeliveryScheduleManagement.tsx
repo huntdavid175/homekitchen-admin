@@ -261,7 +261,7 @@ export function DeliveryScheduleManagement() {
         <Card className="rounded-xl border-none shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-emerald-50 to-green-50">
             <CardTitle className="text-sm font-medium">
-              Today's Deliveries
+              Today&apos;s Deliveries
             </CardTitle>
             <Truck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -292,7 +292,7 @@ export function DeliveryScheduleManagement() {
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">42</div>
             <p className="text-xs text-muted-foreground mt-1">
-              17.0% of today's deliveries
+              17.0% of today&apos;s deliveries
             </p>
           </CardContent>
         </Card>
@@ -749,7 +749,7 @@ export function DeliveryScheduleManagement() {
 
             <TabsContent value="today" className="mt-0">
               <div className="p-6 text-center text-muted-foreground">
-                Today's deliveries view is under development.
+                Today&apos;s deliveries view is under development.
               </div>
             </TabsContent>
 

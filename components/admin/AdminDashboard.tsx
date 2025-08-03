@@ -62,7 +62,7 @@ export function AdminDashboard({
         </h1>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <p className="text-muted-foreground">
-            Welcome back, Admin! Here's what's happening with your meal delivery
+            Welcome back, Admin! Here&apos;s what&apos;s happening with your meal delivery
             service today.
           </p>
           <div className="flex items-center gap-2">

@@ -437,7 +437,7 @@ export function MealForm({
 
       // Log final FormData contents
       console.log("Final FormData contents:");
-      for (let [key, value] of formData.entries()) {
+      for (const [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
 

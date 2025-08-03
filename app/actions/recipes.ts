@@ -87,7 +87,7 @@ export async function createRecipe(formData: FormData) {
   try {
     // Log the FormData contents
     console.log("Server received FormData contents:");
-    for (let [key, value] of formData.entries()) {
+    for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
 
