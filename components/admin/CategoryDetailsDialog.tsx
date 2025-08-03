@@ -17,7 +17,7 @@ interface Category {
   name: string;
   description: string;
   color: string;
-  recipe_count: string;
+  recipe_count?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;

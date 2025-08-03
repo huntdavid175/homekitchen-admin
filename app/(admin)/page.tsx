@@ -58,7 +58,23 @@ export default async function AdminPage() {
     // For example, show an error message to the user
   }
 
+  const defaultOverview = {
+    active_users: {
+      count: 0,
+      growth: { value: 0, trend: "no_change", percentage: 0 },
+    },
+    pending_orders: {
+      count: 0,
+      growth: { value: 0, trend: "no_change", percentage: 0 },
+    },
+    recent_orders: [],
+    top_meals: [],
+  };
+
   return (
-    <AdminDashboard showEmptyStates={showEmptyStates} overview={overviewData} />
+    <AdminDashboard
+      showEmptyStates={showEmptyStates}
+      overview={overviewData || defaultOverview}
+    />
   );
 }

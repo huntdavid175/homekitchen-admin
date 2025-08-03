@@ -54,5 +54,5 @@ export default async function UsersPage() {
     // You might want to handle this error appropriately
     // For example, show an error message to the user
   }
-  return <UserManagement users={usersData.data} />;
+  return <UserManagement users={usersData?.data || []} />;
 }

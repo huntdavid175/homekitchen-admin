@@ -21,7 +21,7 @@ interface Category {
   name: string;
   description: string;
   color: string;
-  recipe_count: string;
+  recipe_count?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -74,7 +74,8 @@ export function DeleteCategoryDialog({
           <AlertDialogDescription className="space-y-3">
             <p>
               Are you sure you want to delete the category{" "}
-              <span className="font-semibold">&quot;{category.name}&quot;</span>?
+              <span className="font-semibold">&quot;{category.name}&quot;</span>
+              ?
             </p>
 
             <div className="p-3 bg-red-50 rounded-lg border border-red-200">
@@ -93,7 +94,7 @@ export function DeleteCategoryDialog({
               </p>
             </div>
 
-            {parseInt(category.recipe_count) > 0 && (
+            {category.recipe_count && parseInt(category.recipe_count) > 0 && (
               <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <p className="text-sm text-amber-800">
                   <strong>Warning:</strong> This category contains{" "}
