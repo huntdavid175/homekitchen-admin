@@ -6,9 +6,9 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
 interface OrderDetailsPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getOrderDetails(orderId: string) {
@@ -43,7 +43,8 @@ async function getOrderDetails(orderId: string) {
 export default async function OrderDetailsPage({
   params,
 }: OrderDetailsPageProps) {
-  const orderId = params.id;
+  const resolvedParams = await params;
+  const orderId = resolvedParams.id;
 
   const orderDetails = await getOrderDetails(orderId);
   console.dir(orderDetails, { depth: null });
