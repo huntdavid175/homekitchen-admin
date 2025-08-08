@@ -73,6 +73,10 @@ export function OrderManagement({
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentStatus = searchParams.get("status") || "all";
+  const deliveryDateParam = searchParams.get("deliveryDate");
+  const initialDeliveryDate = deliveryDateParam
+    ? new Date(deliveryDateParam)
+    : null;
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,7 +86,7 @@ export function OrderManagement({
     dateRange: "all",
     paymentStatus: "all",
     search: "",
-    deliveryDate: null as Date | null,
+    deliveryDate: initialDeliveryDate as Date | null,
   });
 
   // Filter orders based on search term
@@ -110,6 +114,19 @@ export function OrderManagement({
 
   const handleDeliveryDateChange = (date: Date | null) => {
     setFilters((prev) => ({ ...prev, deliveryDate: date }));
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (date) {
+      // Format date in local timezone to avoid UTC conversion issues
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      params.set("deliveryDate", `${year}-${month}-${day}`);
+    } else {
+      params.delete("deliveryDate");
+    }
+    params.set("page", "1");
+    router.push(`/orders?${params.toString()}`);
   };
 
   const clearFilters = () => {
@@ -123,6 +140,29 @@ export function OrderManagement({
     setSearchTerm("");
     const params = new URLSearchParams(searchParams.toString());
     params.delete("status");
+    params.delete("deliveryDate");
+    params.set("page", "1");
+    router.push(`/orders?${params.toString()}`);
+  };
+
+  const applyFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    // status
+    if (filters.status === "all") params.delete("status");
+    else params.set("status", filters.status);
+    // delivery date
+    if (filters.deliveryDate) {
+      const year = filters.deliveryDate.getFullYear();
+      const month = String(filters.deliveryDate.getMonth() + 1).padStart(
+        2,
+        "0"
+      );
+      const day = String(filters.deliveryDate.getDate()).padStart(2, "0");
+      params.set("deliveryDate", `${year}-${month}-${day}`);
+    } else {
+      params.delete("deliveryDate");
+    }
+    // reset page
     params.set("page", "1");
     router.push(`/orders?${params.toString()}`);
   };
@@ -319,14 +359,30 @@ export function OrderManagement({
                   type="date"
                   value={
                     filters.deliveryDate
-                      ? format(filters.deliveryDate, "yyyy-MM-dd")
+                      ? (() => {
+                          const year = filters.deliveryDate.getFullYear();
+                          const month = String(
+                            filters.deliveryDate.getMonth() + 1
+                          ).padStart(2, "0");
+                          const day = String(
+                            filters.deliveryDate.getDate()
+                          ).padStart(2, "0");
+                          return `${year}-${month}-${day}`;
+                        })()
                       : ""
                   }
-                  onChange={(e) =>
-                    handleDeliveryDateChange(
-                      e.target.value ? new Date(e.target.value) : null
-                    )
-                  }
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      // Parse date string as local date to avoid timezone issues
+                      const [year, month, day] = e.target.value
+                        .split("-")
+                        .map(Number);
+                      const localDate = new Date(year, month - 1, day);
+                      handleDeliveryDateChange(localDate);
+                    } else {
+                      handleDeliveryDateChange(null);
+                    }
+                  }}
                   className="w-full"
                 />
               </div>
@@ -342,7 +398,11 @@ export function OrderManagement({
                 <X className="h-4 w-4" />
                 Clear Filters
               </Button>
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+              <Button
+                size="sm"
+                className="bg-emerald-600 hover:bg-emerald-700"
+                onClick={applyFilters}
+              >
                 Apply Filters
               </Button>
             </div>
